@@ -1,0 +1,27 @@
+[
+ {
+  "id": 1,
+  "pageName": "Home",
+  "link": "/"
+ },
+ {
+  "id": 2,
+  "pageName": "My Conversations",
+  "link": "/list-conversation"
+ },
+ {
+  "id": 3,
+  "pageName": "Profile",
+  "link": "/Profile"
+ },
+ {
+  "id": 4,
+  "pageName": "Sign Up",
+  "link": "/sign-up"
+ },
+ {
+  "id": 5,
+  "pageName": "Sign In",
+  "link": "/sign-in"
+ }
+]
