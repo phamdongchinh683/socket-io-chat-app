@@ -1,21 +1,60 @@
 import { React, useState } from "react";
 import "react-phone-input-2/lib/style.css";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import AuthButton from "../../components/AuthButton";
 import AuthInput from "../../components/AuthInput";
+import Notification from "../../components/Notification";
+import Layout from "../../layout";
+import { AuthService } from "../../services";
 
 const SignIn = () => {
+  const { login } = AuthService();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const loginAccount = async () => {
+    try {
+
+      if (!email || !password) {
+        toast.warn('Please not empty fields')
+        return;
+      }
+
+      const data = {
+        email: email,
+        password: password
+      }
+
+      const response = await login(data);
+      if (response.data.data.token) {
+        let token = response.data.data.token;
+        localStorage.setItem("token", token);
+        toast.success('Welcome!');
+        navigate('/dashboard')
+      } else {
+        toast.warn(response.data.data)
+      }
+
+    } catch (e) {
+      let errors = e.response?.data?.message;
+      errors.map((error) => toast.error(error));
+    }
+  }
   return (
-    <div class="container">
-      <h2 class="title-auth">Sign In</h2>
-      <form id="signupForm">
-        <AuthInput field="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} hint={'Example: chinhchinh123@gmail.com'} />
-        <AuthInput field="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} hint={'Your password'} />
-        <AuthButton name={'Sign In'} />
-      </form>
-    </div>
+    <Layout>
+      <div className="container">
+        <h2 className="title-auth">Sign In</h2>
+        <form id="signupForm">
+          <AuthInput field="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} hint={'Example: chinhchinh123@gmail.com'} />
+          <AuthInput field="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} hint={'Your password'} />
+          <AuthButton name={'Sign In'} func={loginAccount} />
+          <Link to='/sign-up' className='auth-link-page'>Sign up now</Link>
+        </form>
+        <Notification />
+      </div>
+    </Layout>
   );
 };
 

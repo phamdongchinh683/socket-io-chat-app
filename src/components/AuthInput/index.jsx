@@ -1,6 +1,7 @@
 import { default as propTypes, default as PropTypes } from 'prop-types';
 import React from "react";
 import "./index.css";
+
 const AuthInput = ({ field, type, value, onChange, hint }) => {
  return (
   <div className="form-group">
@@ -12,7 +13,6 @@ const AuthInput = ({ field, type, value, onChange, hint }) => {
     value={value}
     onChange={onChange}
     required
-
    />
   </div>
  );

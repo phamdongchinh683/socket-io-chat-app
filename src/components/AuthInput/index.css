@@ -30,6 +30,15 @@ label {
  margin-bottom: 5px;
 }
 
+
+.auth-link-page {
+ margin-top: 10px;
+ text-align: center;
+ font-size: 17px;
+ font-weight: 600;
+ color: red;
+}
+
 .auth-input {
  width: 100%;
  padding: 8px;
@@ -44,6 +53,7 @@ label {
  padding: 10px;
  background-color: #5cb85c;
  border: none;
+ font-weight: 500;
  color: white;
  border-radius: 4px;
  cursor: pointer;

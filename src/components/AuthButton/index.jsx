@@ -1,13 +1,16 @@
-import { default as PropTypes } from 'prop-types';
+import PropTypes from "prop-types";
 
-const AuthButton = ({ name }) => {
+const AuthButton = ({ name, func }) => {
  return (
-  <button type="submit" class='auth-button'>{name}</button>
- )
-}
+  <button type="button" onClick={func} className="auth-button">
+   {name}
+  </button>
+ );
+};
 
 AuthButton.propTypes = {
- name: PropTypes.string,
+ name: PropTypes.string.isRequired,
+ func: PropTypes.func.isRequired,
 };
 
 export default AuthButton;
