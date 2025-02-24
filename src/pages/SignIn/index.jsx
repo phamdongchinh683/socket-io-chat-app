@@ -5,11 +5,12 @@ import { toast } from "react-toastify";
 import AuthButton from "../../components/AuthButton";
 import AuthInput from "../../components/AuthInput";
 import Notification from "../../components/Notification";
-import Layout from "../../layout";
+import useToken from "../../jwt";
 import { AuthService } from "../../services";
 
 const SignIn = () => {
   const { login } = AuthService();
+  const { setToken } = useToken();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +31,7 @@ const SignIn = () => {
       const response = await login(data);
       if (response.data.data.token) {
         let token = response.data.data.token;
-        localStorage.setItem("token", token);
+        setToken(token)
         toast.success('Welcome!');
         navigate('/dashboard')
       } else {
@@ -43,18 +44,16 @@ const SignIn = () => {
     }
   }
   return (
-    <Layout>
-      <div className="container">
-        <h2 className="title-auth">Sign In</h2>
-        <form id="signupForm">
-          <AuthInput field="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} hint={'Example: chinhchinh123@gmail.com'} />
-          <AuthInput field="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} hint={'Your password'} />
-          <AuthButton name={'Sign In'} func={loginAccount} />
-          <Link to='/sign-up' className='auth-link-page'>Sign up now</Link>
-        </form>
-        <Notification />
-      </div>
-    </Layout>
+    <div className="container">
+      <h2 className="title-auth">Sign In</h2>
+      <form id="signupForm">
+        <AuthInput field="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} hint={'Example: chinhchinh123@gmail.com'} />
+        <AuthInput field="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} hint={'Your password'} />
+        <AuthButton name={'Sign In'} func={loginAccount} />
+        <Link to='/sign-up' className='auth-link-page'>Sign up now</Link>
+      </form>
+      <Notification />
+    </div>
   );
 };
 
