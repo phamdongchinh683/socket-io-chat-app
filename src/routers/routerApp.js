@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 
+import Chat from "../pages/Chat";
 import Conversation from "../pages/Conversation";
 import Home from "../pages/Home";
 import SignIn from "../pages/SignIn";
@@ -10,12 +11,12 @@ const RouterApp = () => {
     <>
       <Routes>
         <Route element={<PrivateRoutes />}>
-          <Route element={<Home />} path="/dashboard" exact />
+          <Route element={<Home />} path="/" exact />
+          <Route path="list-conversation" element={<Conversation />} />
+          <Route path="chat/:id" element={<Chat />} />
         </Route>
         <Route path="sign-in" element={<SignIn />} />
         <Route path="sign-up" element={<SignUp />} />
-        <Route path="list-conversation" element={<Conversation />} />
-        <Route path="chat" element={<Conversation />} />
       </Routes>
     </>
   );

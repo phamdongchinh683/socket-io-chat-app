@@ -1,10 +1,9 @@
 
 import axios from 'axios';
-import useToken from '../jwt';
+import { configAxios } from '../commons/configAxios';
 
 export function AuthService() {
 
-  const { getToken } = useToken();
   const register = async (data) => {
     return await axios.post(process.env.REACT_APP_API_SIGN_UP, data);
   };
@@ -15,11 +14,7 @@ export function AuthService() {
 
 
   const conversationList = async () => {
-    return await axios.get(process.env.REACT_APP_API_CONVERSATION_LIST, {
-      headers: {
-        Authorization: `Bearer ${getToken}`
-      }
-    }
+    return await axios.get(process.env.REACT_APP_API_CONVERSATION_LIST, configAxios
     )
   }
 

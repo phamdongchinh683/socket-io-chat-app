@@ -2,7 +2,7 @@
  {
   "id": 1,
   "pageName": "Home",
-  "link": "/dashboard"
+  "link": "/"
  },
  {
   "id": 2,

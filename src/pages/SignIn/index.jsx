@@ -33,7 +33,7 @@ const SignIn = () => {
         let token = response.data.data.token;
         setToken(token)
         toast.success('Welcome!');
-        navigate('/dashboard')
+        navigate('/')
       } else {
         toast.warn(response.data.data)
       }

@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { socket } from "../../commons/configSocket";
 import { AuthService } from "../../services";
 
 const Conversation = () => {
+ const navigate = useNavigate();
  const [conversations, setConversations] = useState([]);
  const { conversationList } = AuthService();
 
@@ -16,9 +19,18 @@ const Conversation = () => {
    } catch (error) {
     console.error(error);
    }
-  }
+  };
   getConversations();
- }, [])
+
+  return () => {
+   socket.disconnect();
+  };
+ }, []);
+
+
+ const joinConversation = (conversationId) => {
+  navigate(`/chat/${conversationId}`)
+ };
 
  return (
   <div className="chat-container">
@@ -28,7 +40,10 @@ const Conversation = () => {
    ) : (
     <ul className="chat-list">
      {conversations.map((conversation) => (
-      <li key={conversation.conversationId} className="chat-item">
+      <li
+       key={conversation.conversationId}
+       onClick={() => joinConversation(conversation.conversationId)}
+      >
        <span>{conversation.conversationName}</span>
       </li>
      ))}
