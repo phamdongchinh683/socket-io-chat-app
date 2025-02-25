@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { socket } from "../../commons/configSocket";
 import { AuthService } from "../../services";
 
 const Conversation = () => {
@@ -21,10 +20,6 @@ const Conversation = () => {
    }
   };
   getConversations();
-
-  return () => {
-   socket.disconnect();
-  };
  }, []);
 
 

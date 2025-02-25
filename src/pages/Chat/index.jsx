@@ -24,9 +24,10 @@ const Chat = () => {
   getMessages()// call messages get history messages
 
   const sendMessage = () => {
+    
     if (socket && newMessage && id) {
       socket.emit("newMessage", {
-        userEmail: 'example',
+        userEmail: decoded.email,
         conversationId: id,
         messageText: newMessage,
       });
@@ -35,15 +36,14 @@ const Chat = () => {
   useEffect(() => {
     socket.on("onMessage", (data) => {
       if (data.status === "success") {
+        let results = data.data
         setMessages((prev) => [
           ...prev,
           {
-            userEmail: data.data.userEmail,
-            messageText: data.data.messageText,
-            userId: data.data.userId,
+            userEmail: results.userEmail,
+            messageText: results.messageText,
           },
         ]);
-        console.log(data);
       } else if (data.status === "error") {
         console.error("Error received:", data.message);
       }

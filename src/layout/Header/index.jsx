@@ -13,17 +13,15 @@ const Header = () => {
   useEffect(() => {
     if (getToken) {
       socket.emit("messageNotification");
-      socket.on("onNotification", (data) => {
-        if (data.status === 'success') {
-          toast.success(data.data);
-          setNotifications((prev) => prev + 1);
-        }
-      });
     }
-
+    socket.on("onNotification", (data) => {
+      if (data.status === 'success') {
+        toast.success(data.data);
+        setNotifications((prev) => prev + 1);
+      }
+    });
     return () => {
       socket.off("onNotification");
-      socket.disconnect();
     };
   }, []);
 
@@ -36,7 +34,6 @@ const Header = () => {
           </Link>
         ))}
       </div>
-
       <div className="notification-container">
         <span className="notification-icon">🔔</span>
         {notifications > 0 && <span className="notification-count">{notifications}</span>}
