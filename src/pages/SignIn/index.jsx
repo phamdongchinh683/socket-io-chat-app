@@ -44,16 +44,20 @@ const SignIn = () => {
     }
   }
   return (
-    <div className="container">
-      <h2 className="title-auth">Sign In</h2>
-      <form id="signupForm">
-        <AuthInput field="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} hint={'Example: chinhchinh123@gmail.com'} />
-        <AuthInput field="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} hint={'Your password'} />
-        <AuthButton name={'Sign In'} func={loginAccount} />
-        <Link to='/sign-up' className='auth-link-page'>Sign up now</Link>
-      </form>
+    <>
+      <div className='container-page-auth'>
+        <div className="container">
+          <h2 className="title-auth">Sign In</h2>
+          <form id="signupForm">
+            <AuthInput field="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} hint={'Example: chinhchinh123@gmail.com'} />
+            <AuthInput field="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} hint={'Your password'} />
+            <AuthButton name={'Sign In'} func={loginAccount} />
+            <Link to='/sign-up' className='auth-link-page'>Sign up now</Link>
+          </form>
+        </div>
+      </div>
       <Notification />
-    </div>
+    </>
   );
 };
 

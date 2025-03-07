@@ -1,85 +1,94 @@
+import Stack from '@mui/material/Stack';
 import { jwtDecode } from "jwt-decode";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { socket } from "../../commons/configSocket";
-import AuthInput from "../../components/AuthInput";
-
+import MessageInput from "../../components/MessageInput";
+import SendButton from "../../components/SendButton";
+import useToken from "../../jwt";
+import Layout from "../../layout";
+import { Message } from '../../models/Message';
+import BoxChat from "./Components/BoxChat";
+import './index.css';
 
 const Chat = () => {
   const { id } = useParams();
+  const { getToken } = useToken();
   const [historyMessages, setHistoryMessages] = useState([]);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const decoded = jwtDecode(getToken);
+  const run = useRef(false);
 
-  const decoded = jwtDecode(localStorage.getItem('token'));
-
-  // console.log(decoded)
-  const getMessages = () => {
-    socket.emit("joinConversation", { conversationId: id });
-    socket.on("historyMessage", (data) => {
-      setHistoryMessages(data.result.length > 0 ? data.result : []);
-    });
-  }
-
-  getMessages()// call messages get history messages
-
-  const sendMessage = () => {
-    
-    if (socket && newMessage && id) {
-      socket.emit("newMessage", {
-        userEmail: decoded.email,
-        conversationId: id,
-        messageText: newMessage,
-      });
-    }
-  };
   useEffect(() => {
-    socket.on("onMessage", (data) => {
+    if (!run.current) {
+      socket.emit('joinConversation', { conversationId: id })
+      socket.on('historyMessage', (data) => {
+        setHistoryMessages(data.result.length > 0 ? data.result : []);
+      })
+      run.current = true;
+    }
+  }, [id]);
+
+  useEffect(() => {
+    socket.on('onMessage', (data) => {
       if (data.status === "success") {
-        let results = data.data
         setMessages((prev) => [
           ...prev,
           {
-            userEmail: results.userEmail,
-            messageText: results.messageText,
+            id: data.data.id,
+            userEmail: data.data.userEmail,
+            messageText: data.data.messageText,
           },
         ]);
-      } else if (data.status === "error") {
-        console.error("Error received:", data.message);
+      } else {
+        console.error(data.message);
       }
-    });
-
+    })
     return () => {
-      socket.off('onMessage')
+      socket.off("onMessage");
     };
-  }, []);
+  }, [])
 
+
+  const sendMessage = () => {
+    if (socket && newMessage && id) {
+      socket.emit("newMessage",
+        new Message(decoded.email, id, newMessage)
+      );
+      setNewMessage('')
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      sendMessage();
+      setNewMessage('')
+    }
+  };
 
   return (
-    <div className="chat-messages">
-      <h3>Messages</h3>
-      {historyMessages.length > 0 ? (
-        <ul>
-          {historyMessages.map((msg, index) => (
-            <li key={index}>
-              <strong>{msg.userEmail}</strong>: {msg.messageText}
-            </li>
-          ))}
-          {messages.map((msg, index) => (
-            <li key={index}>
-              <strong>{msg.userEmail}: {msg.messageText}</strong>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No history message.</p>
-      )}
+    <Layout>
+      <div className="chat-container">
+        <h3>Messages</h3>
+        <BoxChat historyMessages={historyMessages} newMessages={messages} userSend={decoded.email} />
+        <Stack direction="row" spacing={0} sx={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
+          <MessageInput label={'Send message here'} value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            handleKeyDown={handleKeyDown} />
+          <SendButton func={sendMessage} />
+        </Stack>
+      </div>
+    </Layout>
 
-      <AuthInput type={'text'} hint={'Send message here'} value={newMessage} onChange={(e) => setNewMessage(e.target.value)} />
-      <button onClick={sendMessage}
-        onKeyDown={e => e.key === 'Enter' ? sendMessage : ''}>Send</button>
-    </div >
   );
 };
 
 export default Chat;
+
+
+
+

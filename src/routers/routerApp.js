@@ -12,7 +12,7 @@ const RouterApp = () => {
       <Routes>
         <Route element={<PrivateRoutes />}>
           <Route element={<Home />} path="/" exact />
-          <Route path="list-conversation" element={<Conversation />} />
+          <Route path="my-chats" element={<Conversation />} />
           <Route path="chat/:id" element={<Chat />} />
         </Route>
         <Route path="sign-in" element={<SignIn />} />

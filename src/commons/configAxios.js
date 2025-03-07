@@ -1,3 +1,3 @@
 export const configAxios = {
-  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
 };

@@ -1,7 +1,7 @@
 export class Message {
-  constructor(conversationId, userEmail, messageText) {
-    this.conversationId = conversationId;
+  constructor(userEmail, conversationId, messageText) {
     this.userEmail = userEmail;
+    this.conversationId = conversationId;
     this.messageText = messageText;
   }
 }

@@ -1,12 +1,12 @@
 function useToken() {
-  const getToken = localStorage.getItem("token");
+  const getToken = sessionStorage.getItem("token");
 
   const setToken = (newToken) => {
-    localStorage.setItem("token", newToken);
+    sessionStorage.setItem("token", newToken);
   };
 
   const deleteToken = () => {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
   };
 
   return { getToken, setToken, deleteToken };

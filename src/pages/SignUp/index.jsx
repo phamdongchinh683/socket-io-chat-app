@@ -41,24 +41,28 @@ const SignUp = () => {
     }
   };
   return (
-    <div className="container">
-      <h2 className="title-auth">Sign Up</h2>
-      <form id="signupForm">
-        <AuthInput field="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} hint={'Example: chinhchinh123@gmail.com'} />
-        <AuthInput field="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} hint={'Your password'} />
-        <label className='label-auth-field'>Mobile Number</label>
-        <PhoneInput
-          value={mobileNumber}
-          country={"vn"}
-          className="number"
-          style={{ marginBottom: "16px" }}
-          onChange={setMobileNumber} />
-        <AuthButton name={'Sign Up'} func={registerAccount} />
-        <Link to='/sign-in' className='auth-link-page'>Sign in to your account here</Link>
-
-      </form>
+    <>
+      <div className="container-page-auth">
+        <div className="container">
+          <h2 className="title-auth">Sign Up</h2>
+          <form id="signupForm">
+            <AuthInput field="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} hint={'Example: chinhchinh123@gmail.com'} />
+            <AuthInput field="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} hint={'Your password'} />
+            <label className='label-auth-field'>Mobile Number</label>
+            <PhoneInput
+              value={mobileNumber}
+              country={"vn"}
+              className="number"
+              style={{ marginBottom: "16px" }}
+              onChange={setMobileNumber} />
+            <AuthButton name={'Sign Up'} func={registerAccount} />
+            <Link to='/sign-in' className='auth-link-page'>Sign in to your account here</Link>
+          </form>
+          <Notification />
+        </div>
+      </div>
       <Notification />
-    </div>
+    </>
   );
 };
 
