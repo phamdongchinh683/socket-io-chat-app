@@ -2,17 +2,18 @@ import Stack from '@mui/material/Stack';
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { socket } from "../../commons/configSocket";
+import { getSocket } from "../../commons/configSocket";
 import MessageInput from "../../components/MessageInput";
 import SendButton from "../../components/SendButton";
 import useToken from "../../jwt";
-import Layout from "../../layout";
 import { Message } from '../../models/Message';
 import BoxChat from "./Components/BoxChat";
 import './index.css';
 
 const Chat = () => {
   const { id } = useParams();
+  const socket = getSocket();
+
   const { getToken } = useToken();
   const [historyMessages, setHistoryMessages] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -68,21 +69,19 @@ const Chat = () => {
   };
 
   return (
-    <Layout>
-      <div className="chat-container">
-        <h3>Messages</h3>
-        <BoxChat historyMessages={historyMessages} newMessages={messages} userSend={decoded.email} />
-        <Stack direction="row" spacing={0} sx={{
-          justifyContent: "center",
-          alignItems: "center",
-        }}>
-          <MessageInput label={'Send message here'} value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            handleKeyDown={handleKeyDown} />
-          <SendButton func={sendMessage} />
-        </Stack>
-      </div>
-    </Layout>
+    <div className="chat-container">
+      <h3>Messages</h3>
+      <BoxChat historyMessages={historyMessages} newMessages={messages} userSend={decoded.email} />
+      <Stack direction="row" spacing={0} sx={{
+        justifyContent: "center",
+        alignItems: "center",
+      }}>
+        <MessageInput label={'Send message here'} value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          handleKeyDown={handleKeyDown} />
+        <SendButton func={sendMessage} />
+      </Stack>
+    </div>
 
   );
 };

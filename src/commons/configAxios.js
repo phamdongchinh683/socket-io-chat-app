@@ -1,3 +1,5 @@
+let token = sessionStorage.getItem("token");
+
 export const configAxios = {
-  headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
+  headers: { Authorization: `Bearer ${token}` },
 };

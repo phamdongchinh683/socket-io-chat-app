@@ -12,7 +12,7 @@ import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import { toast } from "react-toastify";
-import { socket } from "../../commons/configSocket";
+import { getSocket } from "../../commons/configSocket";
 import Notification from '../../components/Notification';
 import useToken from '../../jwt';
 import MenuMobileRender from './Components/MenuMobileRender';
@@ -21,17 +21,17 @@ import MenuRender from './Components/MenuRender';
 
 export default function Header() {
   const { getToken } = useToken();
+  const socket = getSocket();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [openNotificationMenu, setOpenNotificationMenu] = useState(null);
-  const [countNotifications, setCountNotifications] = useState(0);
   const [localNotifications, setLocalNotifications] = useState([]);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const token = getToken;
-  const decoded = token ? jwtDecode(token) : null;
+  const decoded = jwtDecode(token);
 
   const menuId = 'primary-search-account-menu';
   const mobileMenuId = 'primary-search-account-menu-mobile';
@@ -45,13 +45,18 @@ export default function Header() {
   };
 
   useEffect(() => {
-    if (token) {
-      const localstorageNotification = JSON.parse(localStorage.getItem(decoded.email)) || '[]';
-      setCountNotifications(localstorageNotification.length);
-      setLocalNotifications(localstorageNotification);
-    } else {
-      setCountNotifications(0);
+    const localstorageNotification = localStorage.getItem(decoded.email);
+
+    if (!localstorageNotification) {
+      localStorage.setItem(decoded.email, JSON.stringify([]));
       setLocalNotifications([]);
+    } else {
+      try {
+        let parseNotifications = JSON.parse(localstorageNotification);
+        setLocalNotifications(parseNotifications ? parseNotifications : []);
+      } catch (error) {
+        setLocalNotifications([]);
+      }
     }
   }, []);
 
@@ -59,26 +64,23 @@ export default function Header() {
     if (token) {
       socket.emit("messageNotification");
     }
-
     socket.on("onNotification", (data) => {
       if (data.status === 'success') {
         toast.success(data.data);
         setLocalNotifications((prev) => {
           const updatedNotifications = [...prev, data.data];
-          if (decoded?.email) {
-            localStorage.setItem(decoded.email,
-              JSON.stringify(updatedNotifications.filter((param) => param !== null)));
+          if (decoded.email) {
+            localStorage.setItem(decoded.email, JSON.stringify(updatedNotifications));
           }
           return updatedNotifications;
         });
-        setCountNotifications((prev) => prev + 1);
       }
     });
 
     return () => {
       socket.off("onNotification");
     };
-  }, []);
+  }, [socket]);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -100,9 +102,8 @@ export default function Header() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography component={Link} to='/' variant="h6" sx={{ display: { xs: "none", sm: "block" }, textDecoration: "none", color: "inherit", cursor: "pointer" }}
-          >
-            Chat App
+          <Typography component={Link} to='/' variant="h6" sx={{ display: { xs: "none", sm: "block" }, textDecoration: "none", color: "inherit", cursor: "pointer" }}>
+            Chat Application
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -112,7 +113,7 @@ export default function Header() {
               </Badge>
             </IconButton>
             <IconButton size="large" color="inherit" onClick={handleNotificationMenuOpen}>
-              <Badge badgeContent={countNotifications} color="error">
+              <Badge badgeContent={localNotifications.length} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -147,7 +148,7 @@ export default function Header() {
         mobileMenuId={mobileMenuId}
         isMobileMenuOpen={isMobileMenuOpen}
         handleMobileMenuClose={handleMobileMenuClose}
-        notifications={countNotifications}
+        notifications={localNotifications.length}
         handleProfileMenuOpen={handleProfileMenuOpen}
       />
       <MenuRender

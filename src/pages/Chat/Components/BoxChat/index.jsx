@@ -9,7 +9,7 @@ const BoxChat = ({ historyMessages, newMessages, userSend }) => {
     <>
      {[...historyMessages, ...newMessages].map((msg, index) => (
       <div key={index} className={`message ${msg.userEmail === userSend ? "user" : "other"}`}>
-       <strong>{msg.userEmail}:</strong> {msg.messageText}
+       <strong>{msg.userEmail.split('@')[0]}:</strong> {msg.messageText}
       </div>
      ))}
     </>
