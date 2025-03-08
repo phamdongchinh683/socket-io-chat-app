@@ -68,17 +68,28 @@ const Chat = () => {
     }
   };
 
+  let props = {
+    label: 'Aa',
+    value: newMessage,
+    onChange: (e) => setNewMessage(e.target.value),
+    handleKeyDown: handleKeyDown
+  }
+
+  let boxChatProps = {
+    historyMessages: historyMessages,
+    newMessages: messages,
+    userSend: decoded.email
+  }
+
   return (
     <div className="chat-container">
       <h3>Messages</h3>
-      <BoxChat historyMessages={historyMessages} newMessages={messages} userSend={decoded.email} />
+      <BoxChat {...boxChatProps} />
       <Stack direction="row" spacing={0} sx={{
         justifyContent: "center",
         alignItems: "center",
       }}>
-        <MessageInput label={'Send message here'} value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          handleKeyDown={handleKeyDown} />
+        <MessageInput {...props} />
         <SendButton func={sendMessage} />
       </Stack>
     </div>

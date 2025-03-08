@@ -52,8 +52,8 @@ export default function Header() {
       setLocalNotifications([]);
     } else {
       try {
-        let parseNotifications = JSON.parse(localstorageNotification);
-        setLocalNotifications(parseNotifications ? parseNotifications : []);
+        const parseNotifications = localstorageNotification ? JSON.parse(localstorageNotification) : [];
+        setLocalNotifications(parseNotifications);
       } catch (error) {
         setLocalNotifications([]);
       }
@@ -66,9 +66,10 @@ export default function Header() {
     }
     socket.on("onNotification", (data) => {
       if (data.status === 'success') {
-        toast.success(data.data);
+        let result = data.data
+        toast.success(result.split('conversation:').length ? result.split('conversation:')[0] : result);
         setLocalNotifications((prev) => {
-          const updatedNotifications = [...prev, data.data];
+          const updatedNotifications = [...prev, result];
           if (decoded.email) {
             localStorage.setItem(decoded.email, JSON.stringify(updatedNotifications));
           }
@@ -97,6 +98,28 @@ export default function Header() {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  let MenuMobileRenderProps = {
+    mobileMoreAnchorEl: mobileMoreAnchorEl,
+    mobileMenuId: mobileMenuId,
+    isMobileMenuOpen: isMobileMenuOpen,
+    handleMobileMenuClose: handleMobileMenuClose,
+    notifications: localNotifications.length,
+    handleProfileMenuOpen: handleProfileMenuOpen,
+  }
+
+  let MenuRenderProps = {
+    anchorEl: anchorEl,
+    menuId: menuId,
+    isMenuOpen: isMenuOpen,
+    handleMenuClose: handleMenuClose,
+  }
+
+  let MenuNotificationRenderProps = {
+    openNotificationMenu: openNotificationMenu,
+    handleNotificationMenuClose: handleNotificationMenuClose,
+    localNotifications: localNotifications
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -144,23 +167,13 @@ export default function Header() {
         </Toolbar>
       </AppBar>
       <MenuMobileRender
-        mobileMoreAnchorEl={mobileMoreAnchorEl}
-        mobileMenuId={mobileMenuId}
-        isMobileMenuOpen={isMobileMenuOpen}
-        handleMobileMenuClose={handleMobileMenuClose}
-        notifications={localNotifications.length}
-        handleProfileMenuOpen={handleProfileMenuOpen}
+        {...MenuMobileRenderProps}
       />
       <MenuRender
-        anchorEl={anchorEl}
-        menuId={menuId}
-        isMenuOpen={isMenuOpen}
-        handleMenuClose={handleMenuClose}
+        {...MenuRenderProps}
       />
       <MenuNotificationRender
-        openNotificationMenu={openNotificationMenu}
-        handleNotificationMenuClose={handleNotificationMenuClose}
-        localNotifications={localNotifications}
+        {...MenuNotificationRenderProps}
       />
       <Notification />
     </Box>

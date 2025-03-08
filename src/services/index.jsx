@@ -13,9 +13,12 @@ export function AuthService() {
   const conversationHistoryMessages = (id) =>
     axios.get(`${process.env.REACT_APP_API_GET_MESSAGES_HISTORY}/${id}`, configAxios);
 
+  const getUsers = () => axios.get(`${process.env.REACT_APP_API_GET_ALL_USERS}`, configAxios);
+
   return {
     register,
     login,
+    getUsers,
     conversationList,
     conversationHistoryMessages,
     logOutAccount,
