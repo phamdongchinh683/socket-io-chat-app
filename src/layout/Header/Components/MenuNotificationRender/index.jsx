@@ -21,7 +21,11 @@ const MenuNotificationRender = ({ openNotificationMenu, handleNotificationMenuCl
     localNotifications.map((notification, index) => {
      let notificationSplit = notification.split('conversation:');
      return (
-      <MenuItem key={index} onClick={() => joinConversation(notificationSplit[1])}>
+      <MenuItem key={index}
+       onClick={
+        notificationSplit.length > 1 ? () => joinConversation(notificationSplit[1])
+         : undefined
+       }>
        {notificationSplit[0]}
       </MenuItem>
      );

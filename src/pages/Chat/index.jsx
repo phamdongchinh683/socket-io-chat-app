@@ -2,6 +2,7 @@ import Stack from '@mui/material/Stack';
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { getSocket } from "../../commons/configSocket";
 import MessageInput from "../../components/MessageInput";
 import SendButton from "../../components/SendButton";
@@ -17,6 +18,7 @@ const Chat = () => {
   const { getToken } = useToken();
   const [historyMessages, setHistoryMessages] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const decoded = jwtDecode(getToken);
   const run = useRef(false);
@@ -24,6 +26,12 @@ const Chat = () => {
   useEffect(() => {
     if (!run.current) {
       socket.emit('joinConversation', { conversationId: id })
+      socket.on('statusJoin', (data) => {
+        if (data.status === 'failed') {
+          toast.error(data.message)
+          setLoading(true)
+        }
+      })
       socket.on('historyMessage', (data) => {
         setHistoryMessages(data.result.length > 0 ? data.result : []);
       })
@@ -69,7 +77,7 @@ const Chat = () => {
   };
 
   let props = {
-    label: 'Aa',
+    label: 'Input message here',
     value: newMessage,
     onChange: (e) => setNewMessage(e.target.value),
     handleKeyDown: handleKeyDown
@@ -82,18 +90,22 @@ const Chat = () => {
   }
 
   return (
-    <div className="chat-container">
-      <h3>Messages</h3>
+    <div>
+      <h1>My Chat</h1>
       <BoxChat {...boxChatProps} />
-      <Stack direction="row" spacing={0} sx={{
+      <Stack direction="row" spacing={3} padding={1} sx={{
         justifyContent: "center",
         alignItems: "center",
-      }}>
-        <MessageInput {...props} />
-        <SendButton func={sendMessage} />
+      }}>{loading ? (
+        <></>
+      ) : (
+        <>
+          <MessageInput {...props} />
+          <SendButton func={sendMessage} />
+        </>
+      )}
       </Stack>
     </div>
-
   );
 };
 

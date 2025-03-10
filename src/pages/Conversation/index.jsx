@@ -1,41 +1,30 @@
-import Box from '@mui/material/Box';
-import LinearProgress from '@mui/material/LinearProgress';
+import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from "react";
-import { AuthService } from "../../services";
+import { getSocket } from '../../commons/configSocket';
+import useToken from '../../jwt';
 import ConversationList from './Components/ConverstationList';
 
 const Conversation = () => {
- const { conversationList } = AuthService();
+ const socket = getSocket();
  const [conversations, setConversations] = useState([]);
- const [loading, setLoading] = useState(true);
+ const { getToken } = useToken();
+ const user = jwtDecode(getToken);
 
  useEffect(() => {
-  const getConversations = async () => {
-   try {
-    const response = await conversationList();
-    if (response.data.statusCode === 200) {
-     setConversations(response.data.data);
-     setLoading(false)
-    }
-   } catch (error) {
-    setLoading(true)
-    console.error(error);
+  socket.emit('myChats', { userId: user.sub });
+  socket.on('onChats', (data) => {
+   if (data.status === 'success') {
+    setConversations(data.data);
    }
-  };
-  getConversations();
- }, []);
-
+  })
+ }, [socket]);
 
  return (
   <>
    <h2 className="chat-title">Your Conversations</h2>
    {
-    loading ? (
-     <Box sx={{ width: '100%' }}>
-      <LinearProgress />
-     </Box>
-    ) : conversations.length === 0 ? (
-     <p className="empty-message">You currently have no conversations.</p>
+    conversations.length === 0 ? (
+     <p>There are currently no conversations.</p>
     ) : (
      <ConversationList conversations={conversations} />
     )

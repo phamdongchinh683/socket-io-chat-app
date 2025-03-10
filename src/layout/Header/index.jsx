@@ -27,6 +27,7 @@ export default function Header() {
   const [openNotificationMenu, setOpenNotificationMenu] = useState(null);
   const [localNotifications, setLocalNotifications] = useState([]);
 
+  console.log(localNotifications);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -67,7 +68,7 @@ export default function Header() {
     socket.on("onNotification", (data) => {
       if (data.status === 'success') {
         let result = data.data
-        toast.success(result.split('conversation:').length ? result.split('conversation:')[0] : result);
+        toast.success(result.split('conversation:').length >= 2 ? result.split('conversation:')[0] : result);
         setLocalNotifications((prev) => {
           const updatedNotifications = [...prev, result];
           if (decoded.email) {

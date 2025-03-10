@@ -1,22 +1,15 @@
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+import Input from '@mui/material/Input';
 import { default as PropTypes } from 'prop-types';
+
 import * as React from 'react';
 const MessageInput = ({ label, value, onChange, handleKeyDown }) => {
  return (
-  <Box sx={{ width: 290, maxWidth: '100%' }}>
-   <TextField fullWidth label={label} id="fullWidth"
-    value={value}
+  <Box sx={{ width: '100%', '& > :not(style)': { m: 1 } }}>
+   <Input placeholder={label} value={value}
     onChange={onChange}
     onKeyDown={handleKeyDown}
-    InputProps={{
-     sx: {
-      '&.MuiOutlinedInput-root': {
-       '& fieldset': { border: 'none' },
-      },
-     },
-    }}
-   />
+    sx={{ width: "100%" }} />
   </Box>
  )
 }
