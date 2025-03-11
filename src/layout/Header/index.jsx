@@ -124,7 +124,7 @@ export default function Header() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: 'black' }} >
         <Toolbar>
           <Typography component={Link} to='/' variant="h6" sx={{ display: { xs: "none", sm: "block" }, textDecoration: "none", color: "inherit", cursor: "pointer" }}>
             Chat Application
