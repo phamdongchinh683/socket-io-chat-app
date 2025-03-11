@@ -1,5 +1,6 @@
 import ChatIcon from '@mui/icons-material/Chat';
 import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Button } from '@mui/material';
 import Fab from '@mui/material/Fab';
 import IconButton from '@mui/material/IconButton';
@@ -27,6 +28,7 @@ const ConversationList = ({ conversations }) => {
   const [users, setUsers] = React.useState([]);
   const navigate = useNavigate();
   const userCurrent = jwtDecode(getToken);
+  
   React.useEffect(() => {
     const getUserLocal = localStorage.getItem("users");
 
@@ -75,6 +77,10 @@ const ConversationList = ({ conversations }) => {
 
   const showInitConversation = (param) => {
     setShowInit(param);
+  }
+
+  let deleteStringUsers = () => {
+    setUserIds([])
   }
 
   let selectUserChatProps = {
@@ -129,23 +135,49 @@ const ConversationList = ({ conversations }) => {
       {showInit && (
         <div style={{
           position: 'absolute',
+          background: 'black',
           top: '50%',
+          color: 'white',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          padding: 16,
+          border: 'none',
+          borderRadius: '15pt',
+          padding: 20,
           display: 'flex',
           flexDirection: 'column',
-          gap: 5,
-          alignItems: 'flex-end'
+          alignItems: 'flex-end',
+          gap: 20
         }}>
-          <Fab color='error' aria-label="close"
-            onClick={() => showInitConversation(false)}>
-            <CloseIcon fontSize='medium' />
-          </Fab>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '100%'
+          }} >
+            <strong>Create chat with user</strong>
+            <Fab aria-label="close"
+              onClick={() => showInitConversation(false)}>
+              <CloseIcon fontSize='medium' />
+            </Fab>
+          </div>
           <SelectUserChat {...selectUserChatProps} />
-          <Button variant="contained" color="primary" onClick={initChat}>
-            Create
-          </Button>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: "100%"
+          }}>
+            <IconButton aria-label="delete" size="large" sx={{ color: 'white' }} onClick={deleteStringUsers}>
+              <DeleteIcon fontSize="inherit" />
+            </IconButton>
+            <Button sx={{
+              background: 'white',
+              color: 'black',
+              borderRadius: 2
+            }} onClick={initChat}>
+              Create
+            </Button>
+          </div>
         </div>
       )}
     </>

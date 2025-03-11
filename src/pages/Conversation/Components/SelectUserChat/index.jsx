@@ -1,7 +1,5 @@
 import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from '@mui/material/Select';
 import { useTheme } from '@mui/material/styles';
 import { jwtDecode } from 'jwt-decode';
@@ -33,17 +31,31 @@ const SelectUserChat = ({ users, value, handleChange, email }) => {
   const userCurrent = jwtDecode(sessionStorage.getItem('token'))
 
   return (
-    <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-name-label">Users</InputLabel>
+    <>
+      <FormControl sx={{ m: 1, width: 400 }}>
         <Select
           labelId="demo-multiple-name-label"
           id="demo-multiple-name"
           multiple
+          displayEmpty
           value={value}
           onChange={handleChange}
-          input={<OutlinedInput label="User" />}
+          renderValue={(selected) => {
+            if (selected.length === 0) {
+              return <em>Select here...</em>;
+            }
+            return users
+              .filter((user) => selected.includes(user.id))
+              .map((user) => user.email)
+              .join(', ');
+          }}
           MenuProps={MenuProps}
+          sx={{
+            color: 'white',
+            '& .MuiOutlinedInput-notchedOutline': { borderColor: 'white' },
+            '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'white' },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'white !important' },
+          }}
         >
           {users.map((user) =>
             userCurrent.email !== user.email ? (
@@ -54,11 +66,12 @@ const SelectUserChat = ({ users, value, handleChange, email }) => {
               >
                 {user.email}
               </MenuItem>
-            ) : []
+            ) : null
           )}
         </Select>
       </FormControl>
-    </div >
+
+    </>
   );
 }
 

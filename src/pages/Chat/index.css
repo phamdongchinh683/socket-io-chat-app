@@ -13,9 +13,9 @@
 }
 
 .chat-messages {
- max-width: 1000px;
+ width: 1000px;
  overflow: scroll;
- height: 700px;
+ height: 600px;
  padding: 25pt;
  display: flex;
  border: solid skyblue;
