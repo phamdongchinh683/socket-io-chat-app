@@ -15,8 +15,11 @@ export function AuthService() {
 
   const getUsers = () => axios.get(`${process.env.REACT_APP_API_GET_ALL_USERS}`, configAxios);
 
+  const myProfile = () => axios.get(`${process.env.REACT_APP_API_USER_PROFILE}`, configAxios);
+
   return {
     register,
+    myProfile,
     login,
     getUsers,
     conversationList,

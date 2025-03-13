@@ -22,13 +22,7 @@ const Conversation = () => {
  return (
   <>
    <h2 className="chat-title">Your Conversations</h2>
-   {
-    conversations.length === 0 ? (
-     <p>There are currently no conversations.</p>
-    ) : (
-     <ConversationList conversations={conversations} />
-    )
-   }
+   <ConversationList conversations={conversations} />
   </>
  );
 };

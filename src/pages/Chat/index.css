@@ -1,28 +1,17 @@
-.chat-container {
- display: flex;
- flex-direction: column;
- justify-content: center;
- align-items: center;
- max-width: 1000px;
- height: 800px;
- padding: 15px;
- border: 1px solid #ccc;
- border-radius: 10px;
- overflow: hidden;
- background: #f9f9f9;
-}
+
 
 .chat-messages {
  width: 1000px;
- overflow: scroll;
+ overflow-y: auto;
  height: 600px;
  padding: 25pt;
  display: flex;
- border: solid skyblue;
- border-radius: 17pt;
+ border: solid black;
+ border-radius: 7pt;
  flex-direction: column;
  gap: 15px;
  background: #f9f9f9;
+ scroll-behavior: smooth;
 }
 
 .message {

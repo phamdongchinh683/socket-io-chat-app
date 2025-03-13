@@ -9,6 +9,7 @@ import useToken from "../../jwt";
 import { AuthService } from "../../services";
 
 const SignIn = () => {
+
   const { login } = AuthService();
   const { setToken } = useToken();
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ const SignIn = () => {
       errors.map((error) => toast.error(error));
     }
   }
+
   return (
     <>
       <div className='container-page-auth'>

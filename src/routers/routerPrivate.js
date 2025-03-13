@@ -5,6 +5,7 @@ import Layout from "../layout";
 const PrivateRoutes = () => {
   const { getToken } = useToken();
   let token = getToken;
+
   return token ? <Layout /> : <Navigate to="/sign-in" />;
 };
 

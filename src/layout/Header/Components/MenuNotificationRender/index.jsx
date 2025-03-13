@@ -9,6 +9,7 @@ const MenuNotificationRender = ({ openNotificationMenu, handleNotificationMenuCl
  const joinConversation = (conversationId) => {
   navigate(`/chat/${conversationId}`)
  }
+ 
  return (
   <Menu
    anchorEl={openNotificationMenu}

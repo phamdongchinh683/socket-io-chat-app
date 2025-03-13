@@ -1,6 +1,7 @@
 import ChatIcon from '@mui/icons-material/Chat';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SouthEastIcon from '@mui/icons-material/SouthEast';
 import { Button } from '@mui/material';
 import Fab from '@mui/material/Fab';
 import IconButton from '@mui/material/IconButton';
@@ -9,6 +10,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import Typography from '@mui/material/Typography';
 import { jwtDecode } from 'jwt-decode';
 import { default as PropTypes } from 'prop-types';
 import * as React from 'react';
@@ -28,7 +30,7 @@ const ConversationList = ({ conversations }) => {
   const [users, setUsers] = React.useState([]);
   const navigate = useNavigate();
   const userCurrent = jwtDecode(getToken);
-  
+
   React.useEffect(() => {
     const getUserLocal = localStorage.getItem("users");
 
@@ -54,7 +56,6 @@ const ConversationList = ({ conversations }) => {
 
   React.useEffect(() => {
     socket.on('onMessage', (data) => {
-      console.log(data);
       if (data.status === 'success') {
         navigate(`/chat/${data.result}`);
       }
@@ -91,16 +92,12 @@ const ConversationList = ({ conversations }) => {
   }
 
   let initChat = () => {
-    let userStart = [userCurrent.sub, ...userIds]; // add userCurrent index 0 it will create conversation 
+    let userStart = [userCurrent.sub, ...userIds]; // add user current index 0 it will create conversation 
     let userEmail = new Set(userStart); // set new because i don't duplicate
     let userInChat = users
       .filter(({ id }) => userEmail.has(id))
       .map(({ email }) => email)
       .join(", "); // convert ->> phamdchinh@gmail.com, dsadsdsa@gmail.com - name conversation
-
-    console.log(userStart)
-    console.log(userEmail)
-    console.log(userInChat);
     const newChat = userEmail.size > 2
       ? new Conversation(userStart.toString(), userInChat, "I started conversation", true)
       : new Conversation(userStart.toString(), userInChat, "I started conversation", false);
@@ -110,26 +107,43 @@ const ConversationList = ({ conversations }) => {
 
   return (
     <>
-      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-        {conversations.map((value) => (
-          <ListItem
-            key={value.conversationId}
-            disableGutters
-            secondaryAction={
-              <IconButton aria-label="comment"
-                onClick={() => joinConversation(value.conversationId)}>
-                <ChatIcon />
-              </IconButton>
-            }
-          >
-            <ListItemText primary={`${value.conversationName}`} />
-          </ListItem>
-        ))}
-      </List>
+      {conversations.length > 0 ? (
+        <List sx={{ width: '100%', maxWidth: 360, padding: 10 }}>
+          {conversations.map((value) => (
+            <ListItem
+              key={value.conversationId}
+              disableGutters
+              secondaryAction={
+                <IconButton aria-label="comment" onClick={() => joinConversation(value.conversationId)}>
+                  <ChatIcon />
+                </IconButton>
+              }
+            >
+              <ListItemText primary={value.conversationName} />
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        <>
+          <Typography variant="h3" component="h2" sx={{ textAlign: 'center', padding: 2 }}>No chats </Typography>
+          <SouthEastIcon fontSize='large' />
+        </>
+      )}
       <SpeedDial
         ariaLabel="SpeedDial basic example"
-        sx={{ position: 'absolute', bottom: 16, right: 16 }}
-        icon={<SpeedDialIcon />}
+        sx={{
+          position: 'absolute',
+          bottom: 16,
+          right: 16,
+          '& .MuiFab-primary': {
+            bgcolor: 'black',
+            color: 'white',
+            '&:hover': {
+              bgcolor: 'black'
+            }
+          }
+        }}
+        icon={<SpeedDialIcon sx={{ background: 'black' }} />}
         onClick={() => showInitConversation(true)}
       />
       {showInit && (

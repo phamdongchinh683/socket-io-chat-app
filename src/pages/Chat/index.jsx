@@ -1,4 +1,5 @@
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -97,7 +98,9 @@ const Chat = () => {
         justifyContent: "center",
         alignItems: "center",
       }}>{loading ? (
-        <></>
+        <Typography variant="h3" component="h2" sx={{ textAlign: 'center', padding: 2 }}>
+          Process error occurred
+        </Typography>
       ) : (
         <>
           <MessageInput {...props} />

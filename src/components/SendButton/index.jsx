@@ -14,4 +14,5 @@ const SendButton = ({ func }) => {
 SendButton.propTypes = {
  func: PropTypes.func,
 };
+
 export default SendButton

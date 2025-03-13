@@ -27,7 +27,6 @@ export default function Header() {
   const [openNotificationMenu, setOpenNotificationMenu] = useState(null);
   const [localNotifications, setLocalNotifications] = useState([]);
 
-  console.log(localNotifications);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -65,6 +64,7 @@ export default function Header() {
     if (token) {
       socket.emit("messageNotification");
     }
+
     socket.on("onNotification", (data) => {
       if (data.status === 'success') {
         let result = data.data
@@ -119,25 +119,35 @@ export default function Header() {
   let MenuNotificationRenderProps = {
     openNotificationMenu: openNotificationMenu,
     handleNotificationMenuClose: handleNotificationMenuClose,
-    localNotifications: localNotifications
+    localNotifications: localNotifications.reverse()
   }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ backgroundColor: 'black' }} >
         <Toolbar>
-          <Typography component={Link} to='/' variant="h6" sx={{ display: { xs: "none", sm: "block" }, textDecoration: "none", color: "inherit", cursor: "pointer" }}>
+          <Typography component={Link} to='/' variant="h5" sx={{
+            display: { xs: "none", sm: "block" },
+            textDecoration: "none", color: "inherit",
+            cursor: "pointer"
+          }}>
             Chat Application
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton component={Link} to="/my-chats" size="large" color="inherit">
+            <IconButton component={Link}
+              to="/my-chats"
+              size="large"
+              color="inherit">
               <Badge color="error">
                 <ChatBubbleOutlineIcon />
               </Badge>
             </IconButton>
-            <IconButton size="large" color="inherit" onClick={handleNotificationMenuOpen}>
-              <Badge badgeContent={localNotifications.length} color="error">
+            <IconButton size="large"
+              color="inherit"
+              onClick={handleNotificationMenuOpen}>
+              <Badge badgeContent={localNotifications.length}
+                color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>

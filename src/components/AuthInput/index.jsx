@@ -3,6 +3,7 @@ import React from "react";
 import "./index.css";
 
 const AuthInput = ({ field, type, value, onChange, hint, handleKeyDown }) => {
+
  return (
   <div className="form-group">
    <label className='label-auth-field'>{field}</label>

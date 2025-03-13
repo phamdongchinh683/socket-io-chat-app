@@ -10,12 +10,12 @@ import { User } from "../../models/User";
 import { AuthService } from "../../services";
 
 const SignUp = () => {
+
   const { register } = AuthService();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState();
   const [password, setPassword] = useState("");
-
 
   const registerAccount = async () => {
     try {
@@ -40,6 +40,7 @@ const SignUp = () => {
       errors.map((error) => toast.error(error));
     }
   };
+
   return (
     <>
       <div className="container-page-auth">
