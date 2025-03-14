@@ -55,6 +55,7 @@ const SignIn = () => {
             <AuthInput field="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} hint={'Your password'} />
             <AuthButton name={'Sign In'} func={loginAccount} />
             <Link to='/sign-up' className='auth-link-page'>Sign up now</Link>
+            <Link to='/forgot-password' className='auth-link-page'>Forgot your password?</Link>
           </form>
         </div>
       </div>

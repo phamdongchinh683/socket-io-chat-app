@@ -32,7 +32,7 @@ export function AuthService() {
 
   const updatePassword = (password) => axios.patch(`${process.env.REACT_APP_API_UPDATE_PASSWORD}`, password, configAxios)
 
-  const newPass = (email) => axios.patch(`${process.env.REACT_APP_API_FORGOT_PASSWORD}`, email, configAxios)
+  const newPass = (email) => axios.post(`${process.env.REACT_APP_API_FORGOT_PASSWORD}`, email, configAxios)
 
   return {
     register,

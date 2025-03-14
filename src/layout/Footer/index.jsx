@@ -32,6 +32,16 @@ const Footer = () => {
                 My chats
               </FooterLink>
             </Link>
+            <Link to={'/profile'}>
+              <FooterLink>
+                Profile
+              </FooterLink>
+            </Link>
+            <Link to={'/update-password'}>
+              <FooterLink>
+                Update Password
+              </FooterLink>
+            </Link>
           </Column>
           <Column>
             <Heading>Services</Heading>

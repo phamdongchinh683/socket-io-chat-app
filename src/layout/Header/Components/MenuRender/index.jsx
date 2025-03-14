@@ -19,7 +19,11 @@ const MenuRender = ({ anchorEl, menuId, isMenuOpen, handleMenuClose }) => {
   >
    <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>
     Profile
-   </MenuItem>  <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+   </MenuItem>
+   <MenuItem component={Link} to="/update-password" onClick={handleMenuClose}>
+    Update Password
+   </MenuItem>
+   <MenuItem onClick={handleLogOut}>Logout</MenuItem>
   </Menu>
  )
 }
