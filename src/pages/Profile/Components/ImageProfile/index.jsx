@@ -8,7 +8,7 @@ const ImageProfile = ({ image }) => {
  return (
   <Grid container direction="column" alignItems="center" spacing={1}>
    <Grid item>
-    <Avatar src={image} sx={{ width: 100, height: 100 }} />
+    <Avatar src={image} sx={{ width: 150, height: 150 }} />
    </Grid>
   </Grid>
  );

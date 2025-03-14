@@ -17,8 +17,29 @@ export function AuthService() {
 
   const myProfile = () => axios.get(`${process.env.REACT_APP_API_USER_PROFILE}`, configAxios);
 
+  const updateProfile = (data) => axios.put(`${process.env.REACT_APP_API_UPDATE_PROFILE}`, data, configAxios);
+
+  const uploadImage = (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return axios.post(`${process.env.REACT_APP_API_UPLOAD_IMAGE}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  };
+
+  const updatePassword = (password) => axios.patch(`${process.env.REACT_APP_API_UPDATE_PASSWORD}`, password, configAxios)
+
+  const newPass = (email) => axios.patch(`${process.env.REACT_APP_API_FORGOT_PASSWORD}`, email, configAxios)
+
   return {
     register,
+    uploadImage,
+    updatePassword,
+    updateProfile,
+    newPass,
     myProfile,
     login,
     getUsers,
