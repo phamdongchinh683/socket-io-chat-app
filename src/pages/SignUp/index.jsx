@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useCallback, useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,10 +14,18 @@ const SignUp = () => {
   const { register } = AuthService();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [mobileNumber, setMobileNumber] = useState();
+  const [mobileNumber, setMobileNumber] = useState("");
   const [password, setPassword] = useState("");
 
-  const registerAccount = async () => {
+  const handlePhoneChange = (value, country) => {
+    const maxLength = country?.countryCode === "vn" ? 11 : 15;
+    if (value.length <= maxLength) {
+      setMobileNumber(value);
+    }
+  };
+
+  const registerAccount = useCallback(async () => {
+
     try {
       const data = new User(email, password, mobileNumber, "user");
 
@@ -27,19 +35,29 @@ const SignUp = () => {
       }
 
       const response = await register(data);
+      const result = response?.data?.data;
 
-      if (response.data.data === "success") {
-        toast.success('Welcome! You can sign in now!');
-        navigate('sign-in')
+      if (result === "success") {
+        toast.success("Welcome! You can sign in now!");
+        setTimeout(() => {
+          navigate("/sign-in");
+        }, 1500);
+
       } else {
-        toast.warn(response.data.data)
+        toast.warn(result?.includes("email")
+          ? "This email is already in use"
+          : "This mobile number is already in use");
       }
 
     } catch (e) {
-      let errors = e.response?.data?.message;
-      errors.map((error) => toast.error(error));
+      const errors = e.response?.data?.message;
+      if (Array.isArray(errors)) {
+        errors.forEach((error) => toast.error(error));
+      } else {
+        toast.error("Please try again");
+      }
     }
-  };
+  }, [email, password, mobileNumber, register, navigate]);
 
   return (
     <>
@@ -55,11 +73,11 @@ const SignUp = () => {
               country={"vn"}
               className="number"
               style={{ marginBottom: "16px" }}
-              onChange={setMobileNumber} />
+              onChange={handlePhoneChange}
+            />
             <AuthButton name={'Sign Up'} func={registerAccount} />
             <Link to='/sign-in' className='auth-link-page'>Sign in to your account here</Link>
           </form>
-          <Notification />
         </div>
       </div>
       <Notification />

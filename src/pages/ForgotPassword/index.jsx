@@ -22,7 +22,6 @@ const ForgotPassword = () => {
   setLoading(true);
   try {
    const response = await newPass({ email });
-   console.log(response);
    if (response?.data?.data === "New password has been sent to your email") {
     toast.success(response.data.data);
    } else {

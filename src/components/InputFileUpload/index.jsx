@@ -16,16 +16,23 @@ const VisuallyHiddenInput = styled('input')({
  width: 1,
 });
 
-const InputFileUpload = ({ onChange }) => {
+const InputFileUpload = ({ onChange, name }) => {
 
  return (
   <Button
    component="label"
    variant="contained"
    tabIndex={-1}
-   startIcon={<CloudUploadIcon />}
+   sx={{
+    backgroundColor: 'black',
+    color: 'white',
+    padding: '10px 20px',
+    borderRadius: '8px',
+   }}
+   startIcon={<CloudUploadIcon />
+   }
   >
-   Upload files
+   {name}
    <VisuallyHiddenInput
     type="file"
     onChange={onChange}
@@ -37,6 +44,7 @@ const InputFileUpload = ({ onChange }) => {
 
 InputFileUpload.propTypes = {
  onChange: PropTypes.func,
+ name: PropTypes.string,
 };
 
 export default InputFileUpload;

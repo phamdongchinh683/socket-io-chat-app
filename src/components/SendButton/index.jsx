@@ -5,7 +5,10 @@ import * as React from 'react';
 
 const SendButton = ({ func }) => {
  return (
-  <Button variant="contained" endIcon={<SendIcon />} onClick={func}>
+  <Button variant="contained" endIcon={<SendIcon />} onClick={func} sx={{
+   background: 'black',
+   color: 'white'
+  }}>
    Send
   </Button >
  )

@@ -5,7 +5,7 @@ const PublicRouter = () => {
   const { getToken } = useToken();
   let token = getToken;
 
-  return token ? <Navigate to="/" /> : <Outlet />;
+  return token ? <Navigate to="/my-chats" /> : <Outlet />;
 };
 
 export default PublicRouter;

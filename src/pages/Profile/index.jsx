@@ -11,6 +11,7 @@ const Profile = () => {
  const [phoneNumber, setPhoneNumber] = useState("");
  const [image, setImage] = useState(null);
  const [editField, setEditField] = useState(false);
+ const [loading, setLoading] = useState(false);
  const [user, setUser] = useState(null);
  const { myProfile, updateProfile, uploadImage } = AuthService();
 
@@ -27,7 +28,6 @@ const Profile = () => {
     setEmail(result.email);
     setPhoneNumber(result.phoneNumber);
     setImage(result.image);
-    toast.success(`Hello ${result.email}!`);
    }
   } catch (e) {
    console.log(e.response?.data?.message);
@@ -39,14 +39,17 @@ const Profile = () => {
   if (!file) {
    return;
   }
+
+  setLoading(true);
   try {
    const response = await uploadImage(file);
    if (response.data?.Location) {
     setImage(response.data.Location);
-    toast.success("Image uploaded!");
    }
   } catch (e) {
    console.log(e);
+  } finally {
+   setLoading(false);
   }
  };
 
@@ -99,7 +102,8 @@ const Profile = () => {
      </Grid>
      {editField && (
       <Grid container justifyContent="center">
-       <InputFileUpload onChange={handleImage} />
+       <InputFileUpload name={loading ? 'Uploading' : 'Upload file'}
+        onChange={handleImage} />
       </Grid>
      )}
     </Grid>
@@ -119,8 +123,8 @@ const Profile = () => {
      sx={{ marginTop: 2, background: "black" }}
      onClick={async () => {
       if (editField) {
-       const success = await updateInfo();
-       if (success) {
+       const result = await updateInfo();
+       if (result) {
         setEditField(false);
        }
       } else {

@@ -34,7 +34,7 @@ const SignIn = () => {
         let token = response.data.data.token;
         setToken(token)
         toast.success('Welcome!');
-        navigate('/')
+        navigate('/my-chats')
       } else {
         toast.warn(response.data.data)
       }
@@ -51,8 +51,8 @@ const SignIn = () => {
         <div className="container">
           <h2 className="title-auth">Sign In</h2>
           <form id="signupForm">
-            <AuthInput field="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} hint={'Example: chinhchinh123@gmail.com'} />
-            <AuthInput field="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} hint={'Your password'} />
+            <AuthInput field="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} hint={'Email'} />
+            <AuthInput field="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} hint={'Your Password'} />
             <AuthButton name={'Sign In'} func={loginAccount} />
             <Link to='/sign-up' className='auth-link-page'>Sign up now</Link>
             <Link to='/forgot-password' className='auth-link-page'>Forgot your password?</Link>
