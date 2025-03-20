@@ -108,7 +108,7 @@ const ConversationList = ({ conversations }) => {
   return (
     <>
       {conversations.length > 0 ? (
-        <List sx={{ width: '100%', maxWidth: 360, padding: 10 }}>
+        <List sx={{ width: '100%', maxWidth: 360, padding: 0 }}>
           {conversations.map((value) => (
             <ListItem
               key={value.conversationId}

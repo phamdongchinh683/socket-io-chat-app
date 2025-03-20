@@ -2,11 +2,11 @@ import { Menu } from "@mui/material";
 import MenuItem from '@mui/material/MenuItem';
 import { default as PropTypes } from 'prop-types';
 import { Link } from "react-router-dom";
-import { Handle } from "../../../../handle";
+import useToken from "../../../../jwt";
 
 const MenuRender = ({ anchorEl, menuId, isMenuOpen, handleMenuClose }) => {
 
- const { handleLogOut } = Handle();
+ const { handleLogOut } = useToken();
 
  return (
   <Menu

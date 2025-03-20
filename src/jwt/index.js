@@ -1,15 +1,37 @@
+import { useNavigate } from "react-router-dom";
+import { AuthService } from "../services";
+
 function useToken() {
-  const getToken = sessionStorage.getItem("token");
+  const { logOutAccount } = AuthService();
+  const navigate = useNavigate();
+
+  const getToken = localStorage.getItem("token");
 
   const setToken = (newToken) => {
-    sessionStorage.setItem("token", newToken);
+    localStorage.setItem("token", newToken);
   };
 
   const deleteToken = () => {
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
   };
 
-  return { getToken, setToken, deleteToken };
+  const handleLogOut = async () => {
+    try {
+      const result = await logOutAccount();
+      if (result.data.data === "logged out") {
+        deleteToken();
+        navigate("/sign-in");
+      }
+    } catch (e) {
+      const statusCode = e.response?.data?.statusCode;
+      if (statusCode === 401) {
+        deleteToken();
+        navigate("/sign-in");
+      }
+    }
+  };
+
+  return { getToken, setToken, handleLogOut };
 }
 
 export default useToken;

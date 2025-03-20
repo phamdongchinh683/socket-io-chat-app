@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import { Box } from "./Components/Box";
-import { Column } from "./Components/Column";
-import { FooterContainer } from "./Components/FooterContainer";
-import { FooterLink } from "./Components/FooterLink";
-import { Heading } from "./Components/Heading";
-import { Row } from "./Components/Row";
+import { Box } from "./styles/Box";
+import { Column } from "./styles/Column";
+import { FooterContainer } from "./styles/FooterContainer";
+import { FooterLink } from "./styles/FooterLink";
+import { Heading } from "./styles/Heading";
+import { Row } from "./styles/Row";
 
 const Footer = () => {
   return (

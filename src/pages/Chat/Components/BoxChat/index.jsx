@@ -8,9 +8,11 @@ const BoxChat = ({ historyMessages, newMessages, userSend }) => {
 
  useEffect(() => {
   if (chatRef.current) {
-   chatRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+   setTimeout(() => {
+    chatRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+   }, 0);
   }
- }, [historyMessages, newMessages]);
+ }, [historyMessages.length, newMessages.length]);
 
  if (historyMessages.length === 0 && newMessages.length === 0) {
   return <span>Currently no messages in this chat</span>;

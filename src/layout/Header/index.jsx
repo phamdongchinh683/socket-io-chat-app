@@ -123,70 +123,72 @@ export default function Header() {
   }
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ backgroundColor: 'black' }} >
-        <Toolbar>
-          <Typography component={Link} to='/my-chats' variant="h5" sx={{
-            display: { xs: "none", sm: "block" },
-            textDecoration: "none", color: "inherit",
-            cursor: "pointer"
-          }}>
-            Chat Application
-          </Typography>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton component={Link}
-              to="/my-chats"
-              size="large"
-              color="inherit">
-              <Badge color="error">
-                <ChatBubbleOutlineIcon />
-              </Badge>
-            </IconButton>
-            <IconButton size="large"
-              color="inherit"
-              onClick={handleNotificationMenuOpen}>
-              <Badge badgeContent={localNotifications.length}
-                color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
-      <MenuMobileRender
-        {...MenuMobileRenderProps}
-      />
-      <MenuRender
-        {...MenuRenderProps}
-      />
-      <MenuNotificationRender
-        {...MenuNotificationRenderProps}
-      />
+    <>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static" sx={{ backgroundColor: 'black' }} >
+          <Toolbar>
+            <Typography component={Link} to='/my-chats' variant="h5" sx={{
+              display: { xs: "none", sm: "block" },
+              textDecoration: "none", color: "inherit",
+              cursor: "pointer"
+            }}>
+              Chat Application
+            </Typography>
+            <Box sx={{ flexGrow: 1 }} />
+            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              <IconButton component={Link}
+                to="/my-chats"
+                size="large"
+                color="inherit">
+                <Badge color="error">
+                  <ChatBubbleOutlineIcon />
+                </Badge>
+              </IconButton>
+              <IconButton size="large"
+                color="inherit"
+                onClick={handleNotificationMenuOpen}>
+                <Badge badgeContent={localNotifications.length}
+                  color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </Box>
+            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-label="show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+        <MenuMobileRender
+          {...MenuMobileRenderProps}
+        />
+        <MenuRender
+          {...MenuRenderProps}
+        />
+        <MenuNotificationRender
+          {...MenuNotificationRenderProps}
+        />
+      </Box>
       <Notification />
-    </Box>
+    </>
   );
 }

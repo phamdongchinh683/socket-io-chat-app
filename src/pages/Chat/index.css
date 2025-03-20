@@ -6,7 +6,6 @@
  height: 600px;
  padding: 25pt;
  display: flex;
- border: solid black;
  border-radius: 7pt;
  flex-direction: column;
  gap: 15px;

@@ -1,4 +1,4 @@
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Menu } from "@mui/material";
@@ -31,7 +31,6 @@ const MenuMobileRender = ({
       <ChatBubbleOutlineIcon />
      </Badge>
     </IconButton>
-    <p>My chats</p>
    </MenuItem>
    <MenuItem>
     <IconButton size="large" aria-label="show new notifications" color="inherit">
@@ -39,13 +38,11 @@ const MenuMobileRender = ({
       <NotificationsIcon />
      </Badge>
     </IconButton>
-    <p>Notifications</p>
    </MenuItem>
    <MenuItem onClick={handleProfileMenuOpen}>
     <IconButton size="large" aria-label="account of current user" color="inherit">
-     <AccountCircle />
+     <ArrowDropDownIcon />
     </IconButton>
-    <p>Profile</p>
    </MenuItem>
   </Menu>
  )
