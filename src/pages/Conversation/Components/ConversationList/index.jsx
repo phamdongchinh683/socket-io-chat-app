@@ -44,7 +44,7 @@ const ConversationList = ({ conversations }) => {
       try {
         const response = await getUsers();
         if (response.data.statusCode === 200) {
-          setUsers(response.data.data);
+          setUsers(response.data.data.filter(user => user.id !== userCurrent.sub));
           localStorage.setItem("users", JSON.stringify(response.data.data));
         }
       } catch (error) {

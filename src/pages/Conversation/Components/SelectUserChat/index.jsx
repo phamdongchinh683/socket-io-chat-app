@@ -46,7 +46,7 @@ const SelectUserChat = ({ users, value, handleChange, email }) => {
             }
             return users
               .filter((user) => selected.includes(user.id))
-              .map((user) => user.email)
+              .map((user) => user.email.substring(0, user.email.indexOf("@")))
               .join(', ');
           }}
           MenuProps={MenuProps}
@@ -64,12 +64,12 @@ const SelectUserChat = ({ users, value, handleChange, email }) => {
                 value={user.id}
                 style={getStyles(user.email, email, theme)}
               >
-                {user.email}
+                {user.email.substring(0, user.email.indexOf("@"))}
               </MenuItem>
             ) : null
           )}
         </Select>
-      </FormControl>
+      </FormControl >
 
     </>
   );
