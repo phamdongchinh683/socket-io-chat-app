@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "../services";
+import { setWithExpiry } from "../util";
 
 function useToken() {
   const { logOutAccount } = AuthService();
@@ -8,7 +9,7 @@ function useToken() {
   const getToken = localStorage.getItem("token");
 
   const setToken = (newToken) => {
-    localStorage.setItem("token", newToken);
+    setWithExpiry("token", newToken, 3600000);
   };
 
   const deleteToken = () => {

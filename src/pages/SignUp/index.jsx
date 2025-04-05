@@ -8,6 +8,7 @@ import AuthInput from "../../components/AuthInput";
 import Notification from "../../components/Notification";
 import { User } from "../../models/User";
 import { AuthService } from "../../services";
+import * as validation from '../../util';
 
 const SignUp = () => {
 
@@ -27,12 +28,27 @@ const SignUp = () => {
   const registerAccount = useCallback(async () => {
 
     try {
-      const data = new User(email, password, mobileNumber, "user");
-
       if (!email || !password || !mobileNumber) {
         toast.warn('Please not empty fields')
         return;
       }
+
+      if (!validation.validateEmail(email)) {
+        toast.warn('Please provide a valid email')
+        return
+      }
+
+      if (!validation.validatePassword(password)) {
+        toast.warn('Password must be between 9 and 20 characters')
+        return
+      }
+
+      if (!validation.validatePhoneNumber(mobileNumber)) {
+        toast.warn('Mobile number must be between 10 and 15 characters')
+        return
+      }
+
+      const data = new User(email, password, mobileNumber, "user");
 
       const response = await register(data);
       const result = response?.data?.data;
@@ -50,12 +66,7 @@ const SignUp = () => {
       }
 
     } catch (e) {
-      const errors = e.response?.data?.message;
-      if (Array.isArray(errors)) {
-        errors.forEach((error) => toast.error(error));
-      } else {
-        toast.error("Please try again");
-      }
+      toast.warn('Please try again later')
     }
   }, [email, password, mobileNumber, register, navigate]);
 

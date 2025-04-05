@@ -28,7 +28,7 @@ function getStyles(name, personName, theme) {
 
 const SelectUserChat = ({ users, value, handleChange, email }) => {
   const theme = useTheme();
-  const userCurrent = jwtDecode(sessionStorage.getItem('token'))
+  const userCurrent = jwtDecode(localStorage.getItem('token'))
 
   return (
     <>

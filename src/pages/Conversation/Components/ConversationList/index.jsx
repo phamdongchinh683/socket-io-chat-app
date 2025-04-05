@@ -57,7 +57,7 @@ const ConversationList = ({ conversations }) => {
   React.useEffect(() => {
     socket.on('onMessage', (data) => {
       if (data.status === 'success') {
-        navigate(`/chat/${data.result}`);
+        navigate(`/chat/${data.data}`);
       }
     });
     return () => socket.off('onMessage');
@@ -99,9 +99,8 @@ const ConversationList = ({ conversations }) => {
       .map(({ email }) => email)
       .join(", "); // convert ->> phamdchinh@gmail.com, dsadsdsa@gmail.com - name conversation
     const newChat = userEmail.size > 2
-      ? new Conversation(userStart.toString(), userInChat, "I started conversation", true)
-      : new Conversation(userStart.toString(), userInChat, "I started conversation", false);
-
+      ? new Conversation(userStart.toString(), 'Group Chat', `Created this conversation`, true)
+      : new Conversation(userStart.toString(), userInChat, `Created this conversation`, false);
     socket.emit('newChat', newChat);
   }
 
@@ -125,7 +124,7 @@ const ConversationList = ({ conversations }) => {
         </List>
       ) : (
         <>
-          <Typography variant="h3" component="h2" sx={{ textAlign: 'center', padding: 2 }}>No chats </Typography>
+          <Typography variant="h3" component="h2" sx={{ textAlign: 'center', padding: 2 }}>Not found chats</Typography>
           <SouthEastIcon fontSize='large' />
         </>
       )}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -6,17 +6,23 @@ import AuthButton from "../../components/AuthButton";
 import AuthInput from "../../components/AuthInput";
 import Notification from "../../components/Notification";
 import { AuthService } from "../../services";
+import * as validation from '../../util';
 
 const ForgotPassword = () => {
  const [email, setEmail] = useState("");
  const [loading, setLoading] = useState(false);
  const { newPass } = AuthService();
- const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
- const getNewPassword = async () => {
-  if (!email || !emailRegex.test(email)) {
-   toast.warning("Invalid email format. Example: chinh@gmail.com");
+ const getNewPassword = useCallback(async () => {
+
+  if (!email) {
+   toast.warn('Please not empty')
    return;
+  }
+
+  if (!validation.validateEmail(email)) {
+   toast.warn('Please provide a valid email')
+   return
   }
 
   setLoading(true);
@@ -28,11 +34,13 @@ const ForgotPassword = () => {
     toast.error(response?.data?.data);
    }
   } catch (error) {
-   toast.error(error.response?.data?.message);
+   toast.error('Please try again!');
   } finally {
    setLoading(false);
   }
- };
+ }, [email, newPass])
+
+
 
  return (
   <>

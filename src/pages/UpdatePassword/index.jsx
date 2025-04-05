@@ -4,6 +4,8 @@ import "react-toastify/dist/ReactToastify.css";
 import AuthButton from "../../components/AuthButton";
 import AuthInput from "../../components/AuthInput";
 import { AuthService } from "../../services";
+import * as validation from '../../util';
+
 const UpdatePassword = () => {
  const [password, setPassword] = useState('');
  const [newPassword, setNewPassword] = useState('');
@@ -16,6 +18,17 @@ const UpdatePassword = () => {
    return
   }
 
+  if (!validation.validatePassword(password)) {
+   toast.warn('Password must be between 9 and 20 characters')
+   return
+  }
+
+  if (!validation.validatePassword(newPassword)) {
+   toast.warn('New Password must be between 9 and 20 characters')
+   return
+  }
+
+
   let data = {
    password: password,
    newPassword: newPassword
@@ -25,13 +38,13 @@ const UpdatePassword = () => {
    const response = await updatePassword(data);
    if (response.data.data === 'Your password has changed') {
     toast.success('Updated password')
+    setPassword('');
+    setNewPassword('');
    } else {
     toast.error(response.data.data)
    }
   } catch (error) {
-   console.log(error.response.data.message.map((e) =>
-    toast.error(e)
-   ))
+   toast.error('Please try again!');
   }
  }
 

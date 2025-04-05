@@ -1,3 +1,5 @@
-export const configAxios = () => ({
-  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-});
+import { getWithExpiry } from "../util";
+
+export const configAxios = {
+  headers: { Authorization: `Bearer ${getWithExpiry("token")}` },
+};

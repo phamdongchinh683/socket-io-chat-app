@@ -29,15 +29,19 @@ const Chat = () => {
       socket.emit('joinConversation', { conversationId: id })
       socket.on('statusJoin', (data) => {
         if (data.status === 'failed') {
-          toast.error(data.message)
+          setHistoryMessages(data.message);
           setLoading(true)
         }
       })
       socket.on('historyMessage', (data) => {
-        setHistoryMessages(data.result.length > 0 ? data.result : []);
+        setHistoryMessages(data.data.length > 0 ? data.data : []);
       })
       run.current = true;
     }
+    return () => {
+      socket.off("onMessage");
+      socket.off("statusJoin");
+    };
   }, [id]);
 
   useEffect(() => {
@@ -61,7 +65,20 @@ const Chat = () => {
   }, [])
 
 
+  const updateMessage = () => {
+
+  }
+
+  const deleteMessage = () => {
+
+  }
+
   const sendMessage = () => {
+
+    if (newMessage === '') {
+      toast.warn('Please not empty message')
+      return;
+    }
     if (socket && newMessage && id) {
       socket.emit("newMessage",
         new Message(decoded.email, id, newMessage)
@@ -99,7 +116,6 @@ const Chat = () => {
         alignItems: "center",
       }}>{loading ? (
         <Typography variant="h3" component="h2" sx={{ textAlign: 'center', padding: 2 }}>
-          Process error occurred
         </Typography>
       ) : (
         <>
