@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getSocket } from "../../commons/configSocket";
+import { ConversationEvent, MessageEvent } from '../../commons/socketEvents';
 import MessageInput from "../../components/MessageInput";
 import SendButton from "../../components/SendButton";
 import useToken from "../../jwt";
@@ -26,26 +27,26 @@ const Chat = () => {
 
   useEffect(() => {
     if (!run.current) {
-      socket.emit('joinConversation', { conversationId: id })
-      socket.on('statusJoin', (data) => {
+      socket.emit(ConversationEvent.JOIN_CONVERSATION, { conversationId: id })
+      socket.on(ConversationEvent.STATUS_JOIN, (data) => {
         if (data.status === 'failed') {
           setHistoryMessages(data.message);
           setLoading(true)
         }
       })
-      socket.on('historyMessage', (data) => {
+      socket.on(MessageEvent.MESSAGE_HISTORY, (data) => {
         setHistoryMessages(data.data.length > 0 ? data.data : []);
       })
       run.current = true;
     }
     return () => {
-      socket.off("onMessage");
-      socket.off("statusJoin");
+      socket.off(MessageEvent.MESSAGE);
+      socket.off(ConversationEvent.STATUS_JOIN);
     };
   }, [id]);
 
   useEffect(() => {
-    socket.on('onMessage', (data) => {
+    socket.on(MessageEvent.MESSAGE, (data) => {
       if (data.status === "success") {
         setMessages((prev) => [
           ...prev,
@@ -60,16 +61,16 @@ const Chat = () => {
       }
     })
     return () => {
-      socket.off("onMessage");
+      socket.off(MessageEvent.MESSAGE);
     };
   }, [])
 
 
-  const updateMessage = () => {
-
+  const updateMessage = (id, message) => {
+    socket.emit('joinConversation', { conversationId: id })
   }
 
-  const deleteMessage = () => {
+  const deleteMessage = (id) => {
 
   }
 

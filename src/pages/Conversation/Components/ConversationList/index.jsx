@@ -16,6 +16,7 @@ import { default as PropTypes } from 'prop-types';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getSocket } from '../../../../commons/configSocket';
+import { MessageEvent } from '../../../../commons/socketEvents';
 import useToken from '../../../../jwt';
 import { Conversation } from '../../../../models/Conversation';
 import { AuthService } from '../../../../services';
@@ -56,12 +57,12 @@ const ConversationList = ({ conversations }) => {
   }, [])
 
   React.useEffect(() => {
-    socket.on('onMessage', (data) => {
+    socket.on(MessageEvent.MESSAGE, (data) => {
       if (data.status === 'success') {
         navigate(`/chat/${data.data}`);
       }
     });
-    return () => socket.off('onMessage');
+    return () => socket.off(MessageEvent.MESSAGE);
   }, [socket, navigate]);
 
   const handleChange = (event) => {

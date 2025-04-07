@@ -1,6 +1,7 @@
 import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from "react";
 import { getSocket } from '../../commons/configSocket';
+import { ConversationEvent } from '../../commons/socketEvents';
 import AuthInput from '../../components/AuthInput';
 import useToken from '../../jwt';
 import ConversationList from './Components/ConversationList';
@@ -13,8 +14,8 @@ const Conversation = () => {
  const user = jwtDecode(getToken);
 
  useEffect(() => {
-  socket.emit('myChats', { userId: user.sub });
-  socket.on('onChats', (data) => {
+  socket.emit(ConversationEvent.MY_CHATS, { userId: user.sub });
+  socket.on(ConversationEvent.CONVERSATION_LIST, (data) => {
    if (data.status === 'success') {
     setConversations(data.data);
    }

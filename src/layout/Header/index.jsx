@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { getSocket } from "../../commons/configSocket";
+import { NotificationEvent } from '../../commons/socketEvents';
 import Notification from '../../components/Notification';
 import useToken from '../../jwt';
 import MenuMobileRender from './Components/MenuMobileRender';
@@ -62,10 +63,10 @@ export default function Header() {
 
   useEffect(() => {
     if (token) {
-      socket.emit("messageNotification");
+      socket.emit(NotificationEvent.MESSAGE_NOTIFICATION);
     }
 
-    socket.on("onNotification", (data) => {
+    socket.on(NotificationEvent.NOTIFICATION, (data) => {
       if (data.status === 'success') {
         let result = data.data
         toast.success(result.split('conversation:').length >= 2 ? result.split('conversation:')[0] : result);
@@ -80,7 +81,7 @@ export default function Header() {
     });
 
     return () => {
-      socket.off("onNotification");
+      socket.off(NotificationEvent.NOTIFICATION);
     };
   }, [socket]);
 
