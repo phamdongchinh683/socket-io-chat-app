@@ -41,8 +41,9 @@ const SignIn = () => {
       }
 
       const response = await login(data);
-      if (response.data.data.token) {
-        let token = response.data.data.token;
+
+      if (response.headers["content-length"] > 300) {
+        let token = response.data.data;
         setToken(token)
         toast.success('Welcome!');
         navigate('/my-chats')

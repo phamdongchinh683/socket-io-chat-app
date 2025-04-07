@@ -19,6 +19,7 @@ import { getSocket } from '../../../../commons/configSocket';
 import useToken from '../../../../jwt';
 import { Conversation } from '../../../../models/Conversation';
 import { AuthService } from '../../../../services';
+import { getWithExpiry, setWithExpiry } from '../../../../util';
 import SelectUserChat from '../SelectUserChat';
 
 const ConversationList = ({ conversations }) => {
@@ -32,7 +33,7 @@ const ConversationList = ({ conversations }) => {
   const userCurrent = jwtDecode(getToken);
 
   React.useEffect(() => {
-    const getUserLocal = localStorage.getItem("users");
+    const getUserLocal = getWithExpiry('users');
 
     if (getUserLocal) {
       setUsers(JSON.parse(getUserLocal));
@@ -45,7 +46,7 @@ const ConversationList = ({ conversations }) => {
         const response = await getUsers();
         if (response.data.statusCode === 200) {
           setUsers(response.data.data.filter(user => user.id !== userCurrent.sub));
-          localStorage.setItem("users", JSON.stringify(response.data.data));
+          setWithExpiry("users", JSON.stringify(response.data.data), 200);
         }
       } catch (error) {
         console.error("Error fetching users:", error);
