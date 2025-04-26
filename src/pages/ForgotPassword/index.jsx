@@ -13,6 +13,13 @@ const ForgotPassword = () => {
  const [loading, setLoading] = useState(false);
  const { newPass } = AuthService();
 
+
+ const handleKeyDown = (e) => {
+  if (e.key === "Enter") {
+   getNewPassword()
+  }
+ }
+
  const getNewPassword = useCallback(async () => {
 
   if (!email) {
@@ -41,6 +48,14 @@ const ForgotPassword = () => {
  }, [email, newPass])
 
 
+ let emailInputProps = {
+  field: 'Email',
+  type: "email",
+  value: email,
+  onChange: (e) => setEmail(e.target.value),
+  hint: "Enter your email",
+  handleKeyDown: handleKeyDown
+ }
 
  return (
   <>
@@ -49,11 +64,7 @@ const ForgotPassword = () => {
      <h2 className="title-auth">Forgot Password</h2>
      <form id="forgotPasswordForm">
       <AuthInput
-       field="Email"
-       type="email"
-       value={email}
-       onChange={(e) => setEmail(e.target.value)}
-       hint={"Enter your email"}
+       {...emailInputProps}
       />
       <AuthButton
        name={loading ? "Sending..." : "Send"}

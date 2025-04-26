@@ -35,8 +35,9 @@ label {
  margin-top: 10px;
  text-align: center;
  font-size: 17px;
- font-weight: 600;
- color: red;
+ font-weight: 800;
+ color: black;
+ text-decoration: none;
 }
 
 .auth-input {

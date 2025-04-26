@@ -8,15 +8,16 @@ import { getSocket } from "../../commons/configSocket";
 import { ConversationEvent, MessageEvent } from '../../commons/socketEvents';
 import MessageInput from "../../components/MessageInput";
 import SendButton from "../../components/SendButton";
-import useToken from "../../jwt";
+import useToken from "../../jwt/useToken";
 import { Message } from '../../models/Message';
 import BoxChat from "./Components/BoxChat";
+import SearchMessage from './Components/SearchMessage';
 import './index.css';
 
 const Chat = () => {
   const { id } = useParams();
   const socket = getSocket();
-
+  const [search, setSearch] = useState('');
   const { getToken } = useToken();
   const [historyMessages, setHistoryMessages] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -48,31 +49,35 @@ const Chat = () => {
   useEffect(() => {
     socket.on(MessageEvent.MESSAGE, (data) => {
       if (data.status === "success") {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: data.data.id,
-            userEmail: data.data.userEmail,
-            messageText: data.data.messageText,
-          },
-        ]);
-      } else {
-        console.error(data.message);
+        let result = data.data;
+
+        const keyCount = Object.keys(result).length;
+        if (keyCount > 2) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: result.id,
+              userEmail: result.userEmail,
+              messageText: result.messageText,
+            },
+          ]);
+        } else if (keyCount === 2) {
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === result.id
+                ? { ...msg, messageText: result.messageText }
+                : msg
+            )
+          );
+        }
       }
-    })
+    });
+
     return () => {
       socket.off(MessageEvent.MESSAGE);
     };
-  }, [])
+  }, [socket]);
 
-
-  const updateMessage = (id, message) => {
-    socket.emit('joinConversation', { conversationId: id })
-  }
-
-  const deleteMessage = (id) => {
-
-  }
 
   const sendMessage = () => {
 
@@ -95,6 +100,20 @@ const Chat = () => {
     }
   };
 
+  const editMessage = (messageId, newMessage) => {
+    socket.emit(MessageEvent.UPDATE_MESSAGE, {
+      id: messageId,
+      user_id: decoded.sub,
+      conversation_id: id,
+      message_text: newMessage,
+    })
+  }
+
+  const removeMessage = (id) => {
+
+  }
+
+
   let props = {
     label: 'Input message here',
     value: newMessage,
@@ -102,15 +121,32 @@ const Chat = () => {
     handleKeyDown: handleKeyDown
   }
 
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
+  };
+  const messageFilter = historyMessages.filter((param) => param.messageText.toLowerCase().includes(search.toLowerCase()))
+
   let boxChatProps = {
-    historyMessages: historyMessages,
+    historyMessages: messageFilter,
     newMessages: messages,
-    userSend: decoded.email
+    userSend: decoded?.email,
+    updateMessage: editMessage,
+    removeMessage: removeMessage,
+  }
+
+  let propsSearchMessage = {
+    type: 'search',
+    field: 'Search message',
+    hint: 'Try it',
+    handleSearchChange: handleSearchChange,
   }
 
   return (
     <div>
-      <h1>My Chat</h1>
+      <div>
+        <h1>My Chat</h1>
+        <SearchMessage  {...propsSearchMessage} />
+      </div>
       <BoxChat {...boxChatProps} />
       <Stack direction="row" spacing={3} padding={1} sx={{
         justifyContent: "center",

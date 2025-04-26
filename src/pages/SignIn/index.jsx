@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import AuthButton from "../../components/AuthButton";
 import AuthInput from "../../components/AuthInput";
 import Notification from "../../components/Notification";
-import useToken from "../../jwt";
+import useToken from "../../jwt/useToken";
 import { AuthService } from "../../services";
 import * as validation from '../../util';
 const SignIn = () => {
@@ -17,7 +17,15 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      loginAccount()
+    }
+  }
+
+
   const loginAccount = useCallback(async () => {
+
     if (!email || !password) {
       toast.warn('Please not empty fields')
       return;
@@ -58,19 +66,40 @@ const SignIn = () => {
     }
   }, [email, password, login, navigate])
 
+
+
+  let emailInputProps = {
+    field: 'Email',
+    type: "email",
+    value: email,
+    onChange: (e) => setEmail(e.target.value),
+    hint: "Email",
+    handleKeyDown: handleKeyDown
+  }
+
+  let passwordInputProps = {
+    field: 'Password',
+    type: "password",
+    value: password,
+    onChange: (e) => setPassword(e.target.value),
+    hint: "Your Password",
+    handleKeyDown: handleKeyDown
+  }
+
   return (
     <>
       <div className='container-page-auth'>
         <div className="container">
           <h2 className="title-auth">Sign In</h2>
           <form id="signupForm">
-            <AuthInput field="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} hint={'Email'} />
-            <AuthInput field="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} hint={'Your Password'} />
+            <AuthInput {...emailInputProps} />
+            <AuthInput {...passwordInputProps} />
             <AuthButton name={
               loading ? 'Loading...' :
                 'Sign In'
-            } func={loginAccount} />
-            <Link to='/sign-up' className='auth-link-page'>Sign up now</Link>
+            } func={loginAccount}
+              handleKeyDown={handleKeyDown} />
+            <Link to='/sign-up' className='auth-link-page'>Sign up here</Link>
             <Link to='/forgot-password' className='auth-link-page'>Forgot your password?</Link>
           </form>
         </div>

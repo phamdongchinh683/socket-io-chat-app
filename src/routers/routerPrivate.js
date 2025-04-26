@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import useToken from "../jwt";
+import useToken from "../jwt/useToken";
 import Layout from "../layout";
 
 const PrivateRoutes = () => {

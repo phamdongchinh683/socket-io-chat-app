@@ -2,9 +2,12 @@ import PropTypes from "prop-types";
 
 const AuthButton = ({ name, func }) => {
  return (
-  <button type="button" onClick={func} className="auth-button">
-   {name}
-  </button>
+  <input
+   type="button"
+   value={name}
+   onClick={func}
+   className="auth-button"
+  />
  );
 };
 

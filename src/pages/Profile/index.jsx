@@ -13,19 +13,14 @@ const Profile = () => {
   const [image, setImage] = useState(null);
   const [editField, setEditField] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
   const { myProfile, updateProfile, uploadImage } = AuthService();
-
-  useEffect(() => {
-    getProfile();
-  }, []);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const getProfile = async () => {
     try {
       const response = await myProfile();
       if (response.data.statusCode === 200) {
         let result = response.data.data;
-        setUser(result);
         setEmail(result.email);
         setPhoneNumber(result.phoneNumber);
         setImage(result.image);
@@ -36,12 +31,20 @@ const Profile = () => {
     }
   };
 
-  const handleImage = async (event) => {
-    const file = event.target.files[0];
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+
+
+  const handleFileInput = (e) => {
+    setSelectedFile(e.target.files[0]);
+  }
+  const uploadFile = async (file) => {
     if (!file) {
+      toast.warn("Please select a file before uploading");
       return;
     }
-
     setLoading(true);
     try {
       const response = await uploadImage(file);
@@ -72,15 +75,18 @@ const Profile = () => {
     }
 
     let data = {
-      image: image || user?.image,
-      email: email || user?.email,
-      phoneNumber: phoneNumber || user?.phoneNumber,
+      image: image,
+      email: email,
+      phoneNumber: phoneNumber,
     };
 
     try {
       const result = await updateProfile(data);
       if (result.data.data === "Updated") {
         toast.success("Profile updated");
+        setEmail(data.email);
+        setPhoneNumber(data.phoneNumber);
+        setImage(data.image);
         return true;
       } else {
         let exitData = result.data.data;
@@ -111,16 +117,26 @@ const Profile = () => {
             <ImageProfile image={image} />
           </Grid>
           {editField && (
-            <Grid container justifyContent="center">
-              <InputFileUpload name={loading ? 'Uploading' : 'Upload file'}
-                onChange={handleImage} />
-            </Grid>
+            <>
+              <Grid item>
+                <InputFileUpload name="Choose Image" onChange={handleFileInput} />
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  onClick={() => uploadFile(selectedFile)}
+                  disabled={loading}
+                >
+                  {loading ? "Uploading..." : "Upload Image"}
+                </Button>
+              </Grid>
+            </>
           )}
         </Grid>
         <InfoField
           value={email}
           label="Email"
-          onChange={editField ? (e) => setEmail(e.target.value) : undefined}
+          onChange={undefined}
         />
         <InfoField
           value={phoneNumber}
@@ -145,7 +161,7 @@ const Profile = () => {
           {editField ? "Save Profile" : "Edit Profile"}
         </Button>
       </Paper>
-    </Container>
+    </Container >
   );
 };
 

@@ -25,6 +25,14 @@ const SignUp = () => {
     }
   };
 
+
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      registerAccount()
+    }
+  }
+
   const registerAccount = useCallback(async () => {
 
     try {
@@ -70,14 +78,34 @@ const SignUp = () => {
     }
   }, [email, password, mobileNumber, register, navigate]);
 
+
+  let emailInputProps = {
+    field: 'Email',
+    type: "email",
+    value: email,
+    onChange: (e) => setEmail(e.target.value),
+    hint: "Example: chinhchinh123@gmail.com",
+    handleKeyDown: handleKeyDown
+  }
+
+  let passwordInputProps = {
+    field: 'Password',
+    type: "password",
+    value: password,
+    onChange: (e) => setPassword(e.target.value),
+    hint: "Your password",
+    handleKeyDown: handleKeyDown
+  }
+
+
   return (
     <>
       <div className="container-page-auth">
         <div className="container">
           <h2 className="title-auth">Sign Up</h2>
           <form id="signupForm">
-            <AuthInput field="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} hint={'Example: chinhchinh123@gmail.com'} />
-            <AuthInput field="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} hint={'Your password'} />
+            <AuthInput {...emailInputProps} />
+            <AuthInput {...passwordInputProps} />
             <label className='label-auth-field'>Mobile Number</label>
             <PhoneInput
               value={mobileNumber}

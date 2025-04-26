@@ -17,7 +17,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getSocket } from '../../../../commons/configSocket';
 import { MessageEvent } from '../../../../commons/socketEvents';
-import useToken from '../../../../jwt';
+import useToken from '../../../../jwt/useToken';
 import { Conversation } from '../../../../models/Conversation';
 import { AuthService } from '../../../../services';
 import { getWithExpiry, setWithExpiry } from '../../../../util';
@@ -35,9 +35,8 @@ const ConversationList = ({ conversations }) => {
 
   React.useEffect(() => {
     const getUserLocal = getWithExpiry('users');
-
     if (getUserLocal) {
-      setUsers(JSON.parse(getUserLocal));
+      setUsers(getUserLocal);
     } else {
       fetchUsers();
     }
@@ -47,7 +46,7 @@ const ConversationList = ({ conversations }) => {
         const response = await getUsers();
         if (response.data.statusCode === 200) {
           setUsers(response.data.data.filter(user => user.id !== userCurrent.sub));
-          setWithExpiry("users", JSON.stringify(response.data.data), 200);
+          setWithExpiry("users", response.data.data, 1000 * 60 * 60);
         }
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -100,6 +99,7 @@ const ConversationList = ({ conversations }) => {
       .filter(({ id }) => userEmail.has(id))
       .map(({ email }) => email)
       .join(", "); // convert ->> phamdchinh@gmail.com, dsadsdsa@gmail.com - name conversation
+    console.log(userInChat)
     const newChat = userEmail.size > 2
       ? new Conversation(userStart.toString(), 'Group Chat', `Created this conversation`, true)
       : new Conversation(userStart.toString(), userInChat, `Created this conversation`, false);

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getSocket } from '../../commons/configSocket';
 import { ConversationEvent } from '../../commons/socketEvents';
 import AuthInput from '../../components/AuthInput';
-import useToken from '../../jwt';
+import useToken from '../../jwt/useToken';
 import ConversationList from './Components/ConversationList';
 
 const Conversation = () => {

@@ -15,7 +15,8 @@ import { toast } from "react-toastify";
 import { getSocket } from "../../commons/configSocket";
 import { NotificationEvent } from '../../commons/socketEvents';
 import Notification from '../../components/Notification';
-import useToken from '../../jwt';
+import useToken from '../../jwt/useToken';
+import { getWithExpiry, setWithExpiry } from '../../util';
 import MenuMobileRender from './Components/MenuMobileRender';
 import MenuNotificationRender from './Components/MenuNotificationRender';
 import MenuRender from './Components/MenuRender';
@@ -46,18 +47,12 @@ export default function Header() {
   };
 
   useEffect(() => {
-    const localstorageNotification = localStorage.getItem(decoded.email);
-
+    const localstorageNotification = getWithExpiry(`${decoded.email}`);
     if (!localstorageNotification) {
-      localStorage.setItem(decoded.email, JSON.stringify([]));
+      setWithExpiry(decoded.email, [], 1000 * 60 * 60)
       setLocalNotifications([]);
     } else {
-      try {
-        const parseNotifications = localstorageNotification ? JSON.parse(localstorageNotification) : [];
-        setLocalNotifications(parseNotifications);
-      } catch (error) {
-        setLocalNotifications([]);
-      }
+      setLocalNotifications(localstorageNotification || []);
     }
   }, []);
 
@@ -73,7 +68,7 @@ export default function Header() {
         setLocalNotifications((prev) => {
           const updatedNotifications = [...prev, result];
           if (decoded.email) {
-            localStorage.setItem(decoded.email, JSON.stringify(updatedNotifications));
+            setWithExpiry(decoded.email, updatedNotifications, 1000 * 60 * 60)
           }
           return updatedNotifications;
         });

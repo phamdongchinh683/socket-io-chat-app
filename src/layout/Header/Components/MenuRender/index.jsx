@@ -1,12 +1,31 @@
 import { Menu } from "@mui/material";
 import MenuItem from '@mui/material/MenuItem';
 import { default as PropTypes } from 'prop-types';
-import { Link } from "react-router-dom";
-import useToken from "../../../../jwt";
+import { Link, useNavigate } from "react-router-dom";
+import useToken from "../../../../jwt/useToken";
+import { AuthService } from "../../../../services";
 
 const MenuRender = ({ anchorEl, menuId, isMenuOpen, handleMenuClose }) => {
+ const { logOutAccount } = AuthService();
+ const { deleteToken } = useToken()
+ const navigate = useNavigate();
 
- const { handleLogOut } = useToken();
+ const handleLogOut = async () => {
+  try {
+   const result = await logOutAccount();
+   if (result.data.data === "logged out") {
+    deleteToken();
+    navigate("/sign-in");
+   }
+  } catch (e) {
+   const statusCode = e.response?.data?.statusCode;
+   if (statusCode === 401) {
+    deleteToken();
+    navigate("/sign-in");
+   }
+  }
+ };
+
 
  return (
   <Menu
