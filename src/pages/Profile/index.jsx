@@ -48,8 +48,8 @@ const Profile = () => {
     setLoading(true);
     try {
       const response = await uploadImage(file);
-      if (response.data?.Location) {
-        setImage(response.data.Location);
+      if (response) {
+        setImage(response);
       }
     } catch (e) {
       console.log(e);

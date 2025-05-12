@@ -99,7 +99,6 @@ const ConversationList = ({ conversations }) => {
       .filter(({ id }) => userEmail.has(id))
       .map(({ email }) => email)
       .join(", "); // convert ->> phamdchinh@gmail.com, dsadsdsa@gmail.com - name conversation
-    console.log(userInChat)
     const newChat = userEmail.size > 2
       ? new Conversation(userStart.toString(), 'Group Chat', `Created this conversation`, true)
       : new Conversation(userStart.toString(), userInChat, `Created this conversation`, false);

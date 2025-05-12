@@ -109,8 +109,11 @@ const Chat = () => {
     })
   }
 
-  const removeMessage = (id) => {
-
+  const removeMessage = (messageId) => {
+    socket.emit(MessageEvent.DELETE_MESSAGE, {
+      id: messageId,
+      conversationId: id,
+    })
   }
 
 

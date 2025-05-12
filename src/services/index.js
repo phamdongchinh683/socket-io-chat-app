@@ -36,17 +36,6 @@ export function AuthService() {
   const updateProfile = (data) =>
     axios.put(`${process.env.REACT_APP_API_UPDATE_PROFILE}`, data, configAxios);
 
-  const uploadImage = (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    return axios.post(`${process.env.REACT_APP_API_UPLOAD_IMAGE}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-  };
-
   const updatePassword = (password) =>
     axios.patch(
       `${process.env.REACT_APP_API_UPDATE_PASSWORD}`,
@@ -60,6 +49,32 @@ export function AuthService() {
       email,
       configAxios
     );
+
+  const uploadImage = async (file) => {
+    const uploadImageApi = process.env.REACT_APP_CLOUDINARY_UPLOAD_URL;
+    if (!uploadImageApi) {
+      return;
+    }
+
+    if (!file) {
+      return;
+    }
+    const data = new FormData();
+    data.append("file", file);
+    data.append(
+      "upload_preset",
+      process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET_NAME
+    );
+    data.append("cloud_name", process.env.REACT_APP_CLOUDINARY_CLOUD_NAME);
+
+    try {
+      const res = await axios.post(uploadImageApi, data);
+      return res.data.public_id;
+    } catch (error) {
+      console.error("Error uploading image:", error.message);
+      return error.message;
+    }
+  };
 
   return {
     register,
