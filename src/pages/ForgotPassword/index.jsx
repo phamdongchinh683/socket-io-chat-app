@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,7 +20,7 @@ const ForgotPassword = () => {
   }
  }
 
- const getNewPassword = useCallback(async () => {
+ const getNewPassword = async () => {
 
   if (!email) {
    toast.warn('Please not empty')
@@ -35,17 +35,22 @@ const ForgotPassword = () => {
   setLoading(true);
   try {
    const response = await newPass({ email });
+   console.log(response)
    if (response?.data?.data === "New password has been sent to your email") {
     toast.success(response.data.data);
    } else {
     toast.error(response?.data?.data);
    }
   } catch (error) {
-   toast.error('Please try again!');
+   if (error.response.data.data === 'This email not exist') {
+    toast.error(error.response.data.data);
+   } else {
+    toast.error('Please try again!');
+   }
   } finally {
    setLoading(false);
   }
- }, [email, newPass])
+ }
 
 
  let emailInputProps = {
@@ -62,7 +67,7 @@ const ForgotPassword = () => {
    <div className="container-page-auth">
     <div className="container">
      <h2 className="title-auth">Forgot Password</h2>
-     <form id="forgotPasswordForm">
+     <div id="forgotPasswordForm">
       <AuthInput
        {...emailInputProps}
       />
@@ -71,7 +76,7 @@ const ForgotPassword = () => {
        func={getNewPassword}
        disabled={loading}
       />
-     </form>
+     </div>
      <Link to='/sign-in' className='auth-link-page'>Sign in to your account here</Link>
     </div>
    </div>

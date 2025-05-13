@@ -44,7 +44,7 @@ export function AuthService() {
     );
 
   const newPass = (email) =>
-    axios.post(
+    axios.patch(
       `${process.env.REACT_APP_API_FORGOT_PASSWORD}`,
       email,
       configAxios

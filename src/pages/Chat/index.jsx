@@ -26,6 +26,7 @@ const Chat = () => {
   const decoded = jwtDecode(getToken);
   const run = useRef(false);
 
+
   useEffect(() => {
     if (!run.current) {
       socket.emit(ConversationEvent.JOIN_CONVERSATION, { conversationId: id })
@@ -50,7 +51,6 @@ const Chat = () => {
     socket.on(MessageEvent.MESSAGE, (data) => {
       if (data.status === "success") {
         let result = data.data;
-
         const keyCount = Object.keys(result).length;
         if (keyCount > 2) {
           setMessages((prev) => [
@@ -62,6 +62,7 @@ const Chat = () => {
             },
           ]);
         } else if (keyCount === 2) {
+          toast.success('This message updated')
           setMessages((prev) =>
             prev.map((msg) =>
               msg.id === result.id
@@ -69,9 +70,24 @@ const Chat = () => {
                 : msg
             )
           );
+          setHistoryMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === result.id
+                ? { ...msg, messageText: result.messageText }
+                : msg
+            )
+          );
+        } else if (keyCount === 1) {
+          toast.success('This message deleted')
+          setMessages((prev) =>
+            prev.filter((msg) => msg.id !== result.id)
+          );
+          setHistoryMessages((prev) =>
+            prev.filter((msg) => msg.id !== result.id)
+          );
         }
       }
-    });
+    })
 
     return () => {
       socket.off(MessageEvent.MESSAGE);
