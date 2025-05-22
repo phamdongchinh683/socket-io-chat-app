@@ -1,6 +1,6 @@
 # Chat Application (NestJS + Socket.IO)
 
-A real-time chat application built with NestJS, Socket.IO, and MongoDB. The system supports secure user authentication, message CRUD operations, and live conversation updates using WebSocket technology.
+A real-time chat application built with NestJS, Socket.IO, and postgresql. The system supports secure user authentication, message CRUD operations, and live conversation updates using WebSocket technology.
 
 ## Features
 
